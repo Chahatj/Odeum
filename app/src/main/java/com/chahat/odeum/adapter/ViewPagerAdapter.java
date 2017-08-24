@@ -1,4 +1,4 @@
-package com.chahat.odeum.utils;
+package com.chahat.odeum.adapter;
 
 
 import android.support.v4.app.Fragment;

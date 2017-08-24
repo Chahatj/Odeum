@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chahat.odeum.R;
-import com.chahat.odeum.utils.ViewPagerAdapter;
+import com.chahat.odeum.adapter.ViewPagerAdapter;
 
 /**
  * Created by chahat on 24/8/17.
