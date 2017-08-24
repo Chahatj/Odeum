@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,7 +22,9 @@ import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.object.MovieObject;
 import com.chahat.odeum.object.MovieResponse;
+import com.chahat.odeum.utils.NetworkConnection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +41,12 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private  MovieAdapter movieAdapter;
-
+    private Parcelable mRecyclerState;
+    private static final String SAVEINSTANCE_RECYCLERSTATE = "RecyclerState";
+    private static final String SAVEINSTANCE_LIST = "movielist";
+    private static final String SAVEINSTANCE_PAGES = "pages";
+    private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -46,7 +54,7 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
 
         View view = inflater.inflate(R.layout.fragment_now_playing,container,false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -58,23 +66,21 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        if (checkNetworkConnectivity()){
-            fetchData(1);
+        if (savedInstanceState ==null){
+            if (NetworkConnection.checkNetworkConnectivity(getContext())){
+                fetchData(1);
+            }
+        }else {
+            mRecyclerState = savedInstanceState.getParcelable(SAVEINSTANCE_RECYCLERSTATE);
+            movieAdapter.setMovieList((ArrayList)savedInstanceState.getParcelableArrayList(SAVEINSTANCE_LIST));
+            movieAdapter.setTotalPages(savedInstanceState.getInt(SAVEINSTANCE_PAGES));
+            movieAdapter.setCurrentPage(savedInstanceState.getInt(SAVEINSTANCE_CURRENT_PAGE));
+            recyclerView.getLayoutManager().onRestoreInstanceState(mRecyclerState);
         }
-
-
-
         return view;
     }
 
-    private boolean checkNetworkConnectivity(){
-        ConnectivityManager cm =
-                (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
 
     private void fetchData(final int page){
         swipeRefreshLayout.setRefreshing(true);
@@ -87,11 +93,12 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
                 List<MovieObject> movies = response.body().getMovieList();
                 if (page==1){
                     movieAdapter.setMovieList(movies);
-                }else {
+                    movieAdapter.setCurrentPage(1);
+                }else if (page<=response.body().getTotalPages()){
                     movieAdapter.addMovieList(movies);
                 }
-
                 movieAdapter.setTotalPages(response.body().getTotalPages());
+                Log.d("Now",response.body().getTotalPages()+"");
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -111,5 +118,15 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void loadMorePages(int page) {
         fetchData(page);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(SAVEINSTANCE_RECYCLERSTATE,mRecyclerState);
+        outState.putInt(SAVEINSTANCE_PAGES,movieAdapter.getTotalPages());
+        outState.putInt(SAVEINSTANCE_CURRENT_PAGE,movieAdapter.getCurrentPage());
+        outState.putParcelableArrayList(SAVEINSTANCE_LIST,(ArrayList<? extends Parcelable>) movieAdapter.getMovieList());
+        super.onSaveInstanceState(outState);
     }
 }

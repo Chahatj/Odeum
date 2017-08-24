@@ -5,11 +5,14 @@ package com.chahat.odeum.object;
  */
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieObject {
+public class MovieObject implements Parcelable {
 
     @SerializedName("vote_count")
     private int voteCount;
@@ -167,5 +170,15 @@ public class MovieObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
     }
 }
