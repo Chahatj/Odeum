@@ -37,12 +37,14 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
     private int totalPages;
     private int currentPage;
     private LoadListner mLoadListner;
+    private OnItemClick onItemClick;
 
-    public UpcomingMovieAdapter(Context context,LoadListner loadListner){
+    public UpcomingMovieAdapter(Context context,LoadListner loadListner,OnItemClick onItemClick){
         this.context = context;
         mLoadListner = loadListner;
         movieList = new ArrayList<>();
         currentPage = 1;
+        this.onItemClick = onItemClick;
     }
 
     public void setMovieList(List<MovieObject> movieList) {
@@ -87,6 +89,10 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
         void loadMorePages(int page);
     }
 
+    public interface OnItemClick{
+        void onItemClick(int id);
+    }
+
     @Override
     public void onBindViewHolder(UpcomingMovieAdapter.NowPlayingViewHolder holder, int position) {
 
@@ -103,7 +109,7 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
             Date d = new SimpleDateFormat("yyyy-MM-dd").parse(movieObject.getReleaseDate());
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(d);
-            holder.tv_date.setText(calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH ));
+            holder.tv_date.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH )+" "+calendar.get(Calendar.DAY_OF_MONTH));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -125,7 +131,7 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
         }
     }
 
-    public class NowPlayingViewHolder extends RecyclerView.ViewHolder{
+    public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView movieImage;
         private TextView tv_year,tv_title,tv_rating,tv_date;
@@ -138,6 +144,12 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_rating = (TextView) itemView.findViewById(R.id.tv_rating);
             tv_date = (TextView) itemView.findViewById(R.id.tv_date);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClick.onItemClick(movieList.get(getAdapterPosition()).getId());
         }
     }
 }

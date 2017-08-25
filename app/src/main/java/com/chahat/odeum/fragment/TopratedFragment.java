@@ -1,5 +1,6 @@
 package com.chahat.odeum.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chahat.odeum.R;
+import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.adapter.MovieAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
@@ -33,7 +35,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 24/8/17.
  */
 
-public class TopratedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,MovieAdapter.LoadListner{
+public class TopratedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,MovieAdapter.LoadListner,MovieAdapter.OnItemClickListner{
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private  MovieAdapter movieAdapter;
@@ -56,7 +58,7 @@ public class TopratedFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
-        movieAdapter = new MovieAdapter(getContext(),this);
+        movieAdapter = new MovieAdapter(getContext(),this,this);
         recyclerView.setAdapter(movieAdapter);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
@@ -122,5 +124,12 @@ public class TopratedFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void loadMorePages(int page) {
         fetchData(page);
+    }
+
+    @Override
+    public void onItemClick(int id) {
+        Intent intent = new Intent(getContext(), MovieDetailActivity.class);
+        intent.putExtra("Id",id);
+        startActivity(intent);
     }
 }

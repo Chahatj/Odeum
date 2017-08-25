@@ -2,8 +2,11 @@ package com.chahat.odeum.api;
 
 import com.chahat.odeum.object.MovieResponse;
 
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -20,4 +23,6 @@ public interface ApiInterface {
     Call<MovieResponse> getPopularMovie(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("movie/top_rated")
     Call<MovieResponse> getTopRatedMovie(@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("movie/{id}")
+    Call<ResponseBody> getMovieDetail(@Path("id") int id,@Query("api_key") String API_KEY);
 }

@@ -2,7 +2,6 @@ package com.chahat.odeum.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by chahat on 24/8/17.
@@ -29,12 +27,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
     private int totalPages;
     private int currentPage;
     private LoadListner mLoadListner;
+    private OnItemClickListner onItemClickListner;
 
-    public MovieAdapter(Context context,LoadListner loadListner){
+    public MovieAdapter(Context context,LoadListner loadListner,OnItemClickListner onItemClickListner){
         this.context = context;
         mLoadListner = loadListner;
         movieList = new ArrayList<>();
         currentPage = 1;
+        this.onItemClickListner = onItemClickListner;
     }
 
     public void setMovieList(List<MovieObject> movieList) {
@@ -49,6 +49,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
     public void addMovieList(List<MovieObject> movieList){
         this.movieList.addAll(movieList);
         notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListner{
+        void onItemClick(int id);
     }
 
     public List<MovieObject> getMovieList() {
@@ -108,7 +112,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
         }
     }
 
-    public class NowPlayingViewHolder extends RecyclerView.ViewHolder{
+    public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView movieImage;
         private TextView tv_year,tv_title,tv_rating;
@@ -120,6 +124,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
             tv_year = (TextView) itemView.findViewById(R.id.tv_year);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_rating = (TextView) itemView.findViewById(R.id.tv_rating);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClickListner.onItemClick(movieList.get(getAdapterPosition()).getId());
         }
     }
 }

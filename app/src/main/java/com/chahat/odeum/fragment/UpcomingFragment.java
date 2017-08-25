@@ -1,5 +1,6 @@
 package com.chahat.odeum.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chahat.odeum.R;
+import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.adapter.MovieAdapter;
 import com.chahat.odeum.adapter.UpcomingMovieAdapter;
 import com.chahat.odeum.api.ApiClient;
@@ -35,7 +37,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 24/8/17.
  */
 
-public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,UpcomingMovieAdapter.LoadListner {
+public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,UpcomingMovieAdapter.LoadListner,UpcomingMovieAdapter.OnItemClick {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private UpcomingMovieAdapter movieAdapter;
@@ -57,7 +59,7 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
-        movieAdapter = new UpcomingMovieAdapter(getContext(),this);
+        movieAdapter = new UpcomingMovieAdapter(getContext(),this,this);
         recyclerView.setAdapter(movieAdapter);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
@@ -126,5 +128,12 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
         outState.putInt(SAVEINSTANCE_CURRENT_PAGE,movieAdapter.getCurrentPage());
         outState.putParcelableArrayList(SAVEINSTANCE_LIST,(ArrayList<? extends Parcelable>) movieAdapter.getMovieList());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onItemClick(int id) {
+        Intent intent = new Intent(getContext(), MovieDetailActivity.class);
+        intent.putExtra("Id",id);
+        startActivity(intent);
     }
 }
