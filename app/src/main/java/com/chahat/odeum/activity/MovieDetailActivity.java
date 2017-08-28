@@ -3,6 +3,11 @@ package com.chahat.odeum.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +20,8 @@ import android.widget.TextView;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.adapter.MovieAdapter;
+import com.chahat.odeum.adapter.MovieDetailViewAdapter;
+import com.chahat.odeum.adapter.ViewPagerAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.object.MovieDetailObject;
@@ -36,13 +43,20 @@ import retrofit2.Callback;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     @BindView(R.id.movie_image) ImageView movieImage;
     @BindView(R.id.movie_poster) ImageView movie_poster;
     @BindView(R.id.tv_title) TextView tv_title;
     @BindView(R.id.tv_date) TextView tv_date;
     @BindView(R.id.tv_genre) TextView tv_genre;
+    @BindView(R.id.sliding_layout) TabLayout tabs;
+    @BindView(R.id.view_pager) ViewPager pager;
+    CharSequence[] Titles = {"INFO","CAST","REVIEW"};
+    int Numboftabs = 3;
+    private  MovieDetailViewAdapter adapter;
+    @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
+    @BindView(R.id.coordinateLayout) CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +64,19 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         ButterKnife.bind(this);
 
+        appBarLayout.addOnOffsetChangedListener(this);
+
+        adapter =  new MovieDetailViewAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        pager.setAdapter(adapter);
+        tabs.setupWithViewPager(pager);
+
         Intent intent = getIntent();
         int id = intent.getIntExtra("Id",0);
 
+        getMovieData(id);
+    }
+
+    public void getMovieData(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiInterface.getMovieDetail(id,API_KEY);
 
@@ -79,14 +103,16 @@ public class MovieDetailActivity extends AppCompatActivity {
                     movieDetailObject.setVoteAverage(jsonObject.getDouble("vote_average"));
 
                     JSONArray jsonArray = jsonObject.getJSONArray("genres");
-                    String genres=null;
+                    StringBuilder genres = new StringBuilder();
                     for (int i=0;i<jsonArray.length();i++){
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         int id = jsonObject1.getInt("id");
                         String name = jsonObject1.getString("name");
-                        genres = genres +", "+ name;
+                        genres.append(name).append(", ");
                     }
-                    movieDetailObject.setGenresName(genres);
+                    genres.deleteCharAt(genres.length()-2);
+
+                    movieDetailObject.setGenresName(genres.toString());
 
                     JSONArray jsonArray1 = jsonObject.getJSONArray("production_companies");
                     String company=null;
@@ -113,7 +139,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     tv_title.setText(movieDetailObject.getTitle());
 
                     if (movieDetailObject.getGenresName()!=null){
-                        tv_genre.setText(movieDetailObject.getGenresName().substring(1));
+                        tv_genre.setText(movieDetailObject.getGenresName());
                     }
 
 
@@ -127,5 +153,52 @@ public class MovieDetailActivity extends AppCompatActivity {
                 Log.d("MovieDetail",t.toString());
             }
         });
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset == 0)
+        {
+            // Collapsed
+           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                coordinatorLayout.setFitsSystemWindows(true);
+                coordinatorLayout.requestFitSystemWindows();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }*/
+           tabs.setPadding(0,0,0,0);
+        }
+        else
+        {
+            // Not collapsed
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(Color.TRANSPARENT);
+            }*/
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                coordinatorLayout.setFitsSystemWindows(false);
+                coordinatorLayout.requestFitSystemWindows();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }*/
+            if (Build.VERSION.SDK_INT >= 21) {
+
+                // Set the status bar to dark-semi-transparentish
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+                // Set paddingTop of toolbar to height of status bar.
+                // Fixes statusbar covers toolbar issue
+                tabs.setPadding(0, getStatusBarHeight(), 0, 0);
+            }
+        }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
