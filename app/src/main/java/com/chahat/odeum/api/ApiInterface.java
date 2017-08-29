@@ -25,4 +25,10 @@ public interface ApiInterface {
     Call<MovieResponse> getTopRatedMovie(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("movie/{id}")
     Call<ResponseBody> getMovieDetail(@Path("id") int id,@Query("api_key") String API_KEY);
+    @GET("movie/{id}/videos")
+    Call<ResponseBody> getMovieTrailer(@Path("id") int id,@Query("api_key") String API_KEY);
+    @GET("movie/{id}/credits")
+    Call<ResponseBody> getMovieCast(@Path("id") int id,@Query("api_key") String API_KEY);
+    @GET("movie/{id}/reviews")
+    Call<ResponseBody> getMovieReview(@Path("id") int id,@Query("api_key") String API_KEY);
 }

@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TimeUtils;
@@ -66,14 +67,16 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
 
         appBarLayout.addOnOffsetChangedListener(this);
 
-        adapter =  new MovieDetailViewAdapter(getSupportFragmentManager(),Titles,Numboftabs);
-        pager.setAdapter(adapter);
-        tabs.setupWithViewPager(pager);
-
         Intent intent = getIntent();
-        int id = intent.getIntExtra("Id",0);
 
-        getMovieData(id);
+        if (intent!=null && intent.hasExtra("Id")){
+            int id = intent.getIntExtra("Id",0);
+
+            adapter =  new MovieDetailViewAdapter(getSupportFragmentManager(),Titles,Numboftabs,id);
+            pager.setAdapter(adapter);
+            tabs.setupWithViewPager(pager);
+            getMovieData(id);
+        }
     }
 
     public void getMovieData(int id){
@@ -155,31 +158,15 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
         });
     }
 
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        if (verticalOffset == 0)
+        if (verticalOffset > -800)
         {
-            // Collapsed
-           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                coordinatorLayout.setFitsSystemWindows(true);
-                coordinatorLayout.requestFitSystemWindows();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }*/
            tabs.setPadding(0,0,0,0);
         }
         else
         {
-            // Not collapsed
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window window = getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(Color.TRANSPARENT);
-            }*/
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                coordinatorLayout.setFitsSystemWindows(false);
-                coordinatorLayout.requestFitSystemWindows();
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }*/
             if (Build.VERSION.SDK_INT >= 21) {
 
                 // Set the status bar to dark-semi-transparentish
