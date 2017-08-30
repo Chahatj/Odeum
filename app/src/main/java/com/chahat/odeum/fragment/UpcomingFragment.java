@@ -50,6 +50,8 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
     private static final String SAVEINSTANCE_PAGES = "pages";
     private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
     private RecyclerView recyclerView;
+    public static final String ACTIVITY_NAME = "activityname";
+    public static final String TAG = "TransitionPhoto";
 
     @Nullable
     @Override
@@ -67,8 +69,6 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-
-        Log.d("Upcoming fragment",movieAdapter.getCurrentPage()+" "+movieAdapter.getTotalPages());
 
         if (savedInstanceState ==null){
             if (NetworkConnection.checkNetworkConnectivity(getContext())){
@@ -137,11 +137,13 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onItemClick(int id, ImageView sharedView,String imageURL) {
         Bundle bundle = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedView.setTransitionName(getString(R.string.transition_photo));
             bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),sharedView,sharedView.getTransitionName()).toBundle();
         }
         Intent intent = new Intent(getContext(), MovieDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageURL);
+        intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
     }
 }

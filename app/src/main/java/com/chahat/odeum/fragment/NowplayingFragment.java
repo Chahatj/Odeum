@@ -52,6 +52,8 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
     private static final String SAVEINSTANCE_PAGES = "pages";
     private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
     private RecyclerView recyclerView;
+    public static final String ACTIVITY_NAME = "activityname";
+    public static final String TAG = "TransitionPhoto";
 
     @Nullable
     @Override
@@ -139,12 +141,14 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
     public void onItemClick(int id, ImageView sharedView,String imageUrl) {
         Bundle bundle = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            sharedView.setTransitionName(getString(R.string.transition_photo));
             bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),sharedView,sharedView.getTransitionName()).toBundle();
 
         }
         Intent intent = new Intent(getContext(), MovieDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageUrl);
+        intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
     }
 }

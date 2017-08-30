@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TimeUtils;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.chahat.odeum.adapter.MovieDetailViewAdapter;
 import com.chahat.odeum.adapter.ViewPagerAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
+import com.chahat.odeum.fragment.NowplayingFragment;
 import com.chahat.odeum.object.MovieDetailObject;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +47,7 @@ import retrofit2.Callback;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
 
-public class MovieDetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class MovieDetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener,View.OnClickListener {
 
     @BindView(R.id.movie_image) ImageView movieImage;
     @BindView(R.id.movie_poster) ImageView movie_poster;
@@ -59,6 +61,7 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
     private  MovieDetailViewAdapter adapter;
     @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
     @BindView(R.id.coordinateLayout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.imageViewBack) ImageView imageViewBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,20 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
         ButterKnife.bind(this);
 
         appBarLayout.addOnOffsetChangedListener(this);
+        imageViewBack.setOnClickListener(this);
 
         Intent intent = getIntent();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (intent.hasExtra(NowplayingFragment.ACTIVITY_NAME)){
+                if (intent.getStringExtra(NowplayingFragment.ACTIVITY_NAME).equals(NowplayingFragment.TAG)){
+                    movie_poster.setTransitionName(getString(R.string.transition_photo));
+                }else {
+                    movie_poster.setTransitionName(getString(R.string.similar_transition_photo));
+                }
+            }
+
+        }
 
         if (intent!=null && intent.hasExtra("Id") && intent.hasExtra("ImageURL")){
             int id = intent.getIntExtra("Id",0);
@@ -184,5 +199,10 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onBackPressed();
     }
 }

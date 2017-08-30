@@ -69,6 +69,7 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
     @BindView(R.id.textViewAll) TextView textViewAll;
     private MovieVideoAdapter movieVideoAdapter;
     private SimilarMovieAdapter similarMovieAdapter;
+    public static final String ACTIVITY_NAME = "activityname";
 
     @Nullable
     @Override
@@ -81,12 +82,14 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewTrailer.setLayoutManager(layoutManager);
+        recyclerViewTrailer.setNestedScrollingEnabled(false);
         movieVideoAdapter = new MovieVideoAdapter(getContext());
         recyclerViewTrailer.setAdapter(movieVideoAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewMovies.setLayoutManager(linearLayoutManager);
+        recyclerViewMovies.setNestedScrollingEnabled(false);
         similarMovieAdapter = new SimilarMovieAdapter(getContext(),this);
         recyclerViewMovies.setAdapter(similarMovieAdapter);
 
@@ -251,16 +254,14 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
         Bundle bundle = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedView.setTransitionName(getString(R.string.transition_photo));
+            sharedView.setTransitionName(getString(R.string.similar_transition_photo));
             bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),sharedView,sharedView.getTransitionName()).toBundle();
         }
         Intent intent = new Intent(getContext(), MovieDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageURL);
+        intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedView.setTransitionName(null);
-        }
     }
 
     @Override

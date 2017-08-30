@@ -34,6 +34,8 @@ public class SimilarMovieActivity extends AppCompatActivity implements MovieAdap
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     private MovieAdapter movieAdapter;
+    public static final String ACTIVITY_NAME = "activityname";
+    public static final String TAG = "TransitionPhoto";
     private int id;
 
     @Override
@@ -97,11 +99,13 @@ public class SimilarMovieActivity extends AppCompatActivity implements MovieAdap
     public void onItemClick(int id, ImageView sharedView,String imageUrl) {
         Bundle bundle = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedView.setTransitionName(getString(R.string.transition_photo));
             bundle = ActivityOptions.makeSceneTransitionAnimation(this,sharedView,sharedView.getTransitionName()).toBundle();
         }
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageUrl);
+        intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
     }
 

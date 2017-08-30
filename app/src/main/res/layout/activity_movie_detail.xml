@@ -29,6 +29,15 @@
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"/>
 
+                <ImageView
+                    android:id="@+id/imageViewBack"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_arrow_back_white_24dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,8 +96,7 @@
                     android:layout_marginTop="160dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:transitionName="@string/transition_photo"/>
+                    android:layout_marginBottom="16dp" />
 
 
             </FrameLayout>
