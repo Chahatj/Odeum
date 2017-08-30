@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#5D4037</color>
     <color name="colorAccent">#607D8B</color>
     <color name="tabTextColor">#E0E0E0</color>
+    <color name="movieDbPrimaryColor">#01d277</color>
+    <color name="white">#ffffff</color>
 </resources>

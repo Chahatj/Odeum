@@ -87,7 +87,8 @@
                     android:layout_marginTop="160dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:transitionName="@string/transition_photo"/>
 
 
             </FrameLayout>

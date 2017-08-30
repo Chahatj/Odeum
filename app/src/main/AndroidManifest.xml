@@ -22,7 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MovieDetailActivity"
+        <activity
+            android:name=".activity.MovieDetailActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity android:name=".activity.SimilarMovieActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

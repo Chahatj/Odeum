@@ -2,6 +2,7 @@ package com.chahat.odeum.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
     }
 
     public interface OnItemClickListner{
-        void onItemClick(int id);
+        void onItemClick(int id,ImageView sharedImageView,String imageUrl);
     }
 
     public List<MovieObject> getMovieList() {
@@ -129,7 +130,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
 
         @Override
         public void onClick(View view) {
-            onItemClickListner.onItemClick(movieList.get(getAdapterPosition()).getId());
+            ImageView movieImage = (ImageView) view.findViewById(R.id.movie_image);
+            Log.d("MovieAdapter",getAdapterPosition()+"");
+            MovieObject movieObject = movieList.get(getAdapterPosition());
+            onItemClickListner.onItemClick(movieObject.getId(),movieImage,movieObject.getPosterPath());
         }
     }
 }

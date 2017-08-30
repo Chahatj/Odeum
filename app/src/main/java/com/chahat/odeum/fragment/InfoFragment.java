@@ -1,5 +1,8 @@
 package com.chahat.odeum.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,13 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chahat.odeum.R;
+import com.chahat.odeum.activity.MovieDetailActivity;
+import com.chahat.odeum.activity.SimilarMovieActivity;
 import com.chahat.odeum.adapter.MovieVideoAdapter;
+import com.chahat.odeum.adapter.SimilarMovieAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.object.MovieDetailObject;
+import com.chahat.odeum.object.MovieObject;
+import com.chahat.odeum.object.MovieResponse;
 import com.chahat.odeum.object.MovieVideoObject;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +54,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 25/8/17.
  */
 
-public class InfoFragment extends Fragment {
+public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItemClickListner,View.OnClickListener {
 
     private int id;
     private static final String TAG = "InfoFragment";
@@ -57,7 +66,9 @@ public class InfoFragment extends Fragment {
     @BindView(R.id.tv_revenue) TextView textViewRevenue;
     @BindView(R.id.recyclerViewTrailer) RecyclerView recyclerViewTrailer;
     @BindView(R.id.recyclerViewMovies) RecyclerView recyclerViewMovies;
+    @BindView(R.id.textViewAll) TextView textViewAll;
     private MovieVideoAdapter movieVideoAdapter;
+    private SimilarMovieAdapter similarMovieAdapter;
 
     @Nullable
     @Override
@@ -65,6 +76,7 @@ public class InfoFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_info,container,false);
         ButterKnife.bind(this,view);
+        textViewAll.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -75,10 +87,12 @@ public class InfoFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewMovies.setLayoutManager(linearLayoutManager);
-
+        similarMovieAdapter = new SimilarMovieAdapter(getContext(),this);
+        recyclerViewMovies.setAdapter(similarMovieAdapter);
 
         getMovieInfo(id);
         getMovieTrailer(id);
+        getSimilarMovie(id);
         return view;
     }
 
@@ -213,5 +227,46 @@ public class InfoFragment extends Fragment {
 
             }
         });
+    }
+
+    private void getSimilarMovie(int id){
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<MovieResponse> call = apiInterface.getSimilarMovie(id,API_KEY,1);
+        call.enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                List<MovieObject> list = response.body().getMovieList();
+                similarMovieAdapter.setMovieList(list);
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(int id, ImageView sharedView,String imageURL) {
+        Bundle bundle = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedView.setTransitionName(getString(R.string.transition_photo));
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),sharedView,sharedView.getTransitionName()).toBundle();
+        }
+        Intent intent = new Intent(getContext(), MovieDetailActivity.class);
+        intent.putExtra("Id",id);
+        intent.putExtra("ImageURL",imageURL);
+        startActivity(intent,bundle);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedView.setTransitionName(null);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getContext(), SimilarMovieActivity.class);
+        intent.putExtra("Id",id);
+        startActivity(intent);
     }
 }

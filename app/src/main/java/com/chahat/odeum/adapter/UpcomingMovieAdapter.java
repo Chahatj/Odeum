@@ -5,6 +5,7 @@ package com.chahat.odeum.adapter;
  */
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +91,7 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
     }
 
     public interface OnItemClick{
-        void onItemClick(int id);
+        void onItemClick(int id, ImageView imageView,String imageUrl);
     }
 
     @Override
@@ -149,7 +150,9 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
 
         @Override
         public void onClick(View view) {
-            onItemClick.onItemClick(movieList.get(getAdapterPosition()).getId());
+            ImageView movieImage = (ImageView) view.findViewById(R.id.movie_image);
+            MovieObject movieObject = movieList.get(getAdapterPosition());
+            onItemClick.onItemClick(movieObject.getId(),movieImage,movieObject.getPosterPath());
         }
     }
 }

@@ -17,4 +17,7 @@
     <string name="produced_by">Produced by:</string>
     <string name="trailers">Trailers</string>
     <string name="as">as </string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="view_all">View All</string>
+    <string name="transition_photo">transitionPhoto</string>
 </resources>

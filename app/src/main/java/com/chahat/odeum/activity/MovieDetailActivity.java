@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -69,9 +70,9 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
 
         Intent intent = getIntent();
 
-        if (intent!=null && intent.hasExtra("Id")){
+        if (intent!=null && intent.hasExtra("Id") && intent.hasExtra("ImageURL")){
             int id = intent.getIntExtra("Id",0);
-
+            Picasso.with(this).load(ApiClient.IMAGE_URL+intent.getStringExtra("ImageURL")).into(movie_poster);
             adapter =  new MovieDetailViewAdapter(getSupportFragmentManager(),Titles,Numboftabs,id);
             pager.setAdapter(adapter);
             tabs.setupWithViewPager(pager);
@@ -126,10 +127,6 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
                         company = company +", "+ name;
                     }
 
-
-                    if (movieDetailObject.getPosterPath()!=null){
-                        Picasso.with(getApplicationContext()).load(ApiClient.IMAGE_URL+movieDetailObject.getPosterPath()).into(movie_poster);
-                    }
                     if (movieDetailObject.getBackdropPath()!=null){
                         Picasso.with(getApplicationContext()).load(ApiClient.IMAGE_URL+movieDetailObject.getBackdropPath()).into(movieImage);
                     }

@@ -1,5 +1,6 @@
 package com.chahat.odeum.fragment;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -7,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
@@ -133,9 +136,15 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     @Override
-    public void onItemClick(int id) {
+    public void onItemClick(int id, ImageView sharedView,String imageUrl) {
+        Bundle bundle = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),sharedView,sharedView.getTransitionName()).toBundle();
+
+        }
         Intent intent = new Intent(getContext(), MovieDetailActivity.class);
         intent.putExtra("Id",id);
-        startActivity(intent);
+        intent.putExtra("ImageURL",imageUrl);
+        startActivity(intent,bundle);
     }
 }
