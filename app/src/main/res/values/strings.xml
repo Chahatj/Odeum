@@ -22,4 +22,8 @@
     <string name="transition_photo">transitionPhoto</string>
     <string name="similar_transition_photo">SimilarTransitionPhoto</string>
     <string name="no_result_found">No Result Found</string>
+    <string name="for_more_information_contact_us">For more information or any suggestion contact us</string>
+    <string name="email">Email:</string>
+    <string name="my_email">chahat.jain0@gmail.com</string>
+    <string name="contact_us">Contact us</string>
 </resources>

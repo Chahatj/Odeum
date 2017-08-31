@@ -25,7 +25,10 @@
         <activity
             android:name=".activity.MovieDetailActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity android:name=".activity.SimilarMovieActivity"
+        <activity
+            android:name=".activity.SimilarMovieActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.ContactActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
