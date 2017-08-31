@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.object.MovieObject;
@@ -16,6 +18,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by chahat on 24/8/17.
@@ -27,10 +32,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
     private Context context;
     private int totalPages;
     private int currentPage;
-    private LoadListner mLoadListner;
-    private OnItemClickListner onItemClickListner;
+    private LoadPagesInterface mLoadListner;
+    private SharedItemClickListner onItemClickListner;
 
-    public MovieAdapter(Context context,LoadListner loadListner,OnItemClickListner onItemClickListner){
+    public MovieAdapter(Context context,LoadPagesInterface loadListner,SharedItemClickListner onItemClickListner){
         this.context = context;
         mLoadListner = loadListner;
         movieList = new ArrayList<>();
@@ -50,10 +55,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
     public void addMovieList(List<MovieObject> movieList){
         this.movieList.addAll(movieList);
         notifyDataSetChanged();
-    }
-
-    public interface OnItemClickListner{
-        void onItemClick(int id,ImageView sharedImageView,String imageUrl);
     }
 
     public List<MovieObject> getMovieList() {
@@ -80,10 +81,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
         return new NowPlayingViewHolder(view);
     }
 
-    public interface LoadListner{
-        void loadMorePages(int page);
-    }
-
     @Override
     public void onBindViewHolder(MovieAdapter.NowPlayingViewHolder holder, int position) {
 
@@ -99,7 +96,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
         if (position == movieList.size() - 1){
             if (currentPage<totalPages){
                 currentPage = currentPage + 1;
-                mLoadListner.loadMorePages(currentPage);
+                mLoadListner.loadPage(currentPage);
             }
         }
     }
@@ -115,23 +112,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
 
     public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ImageView movieImage;
-        private TextView tv_year,tv_title,tv_rating;
+        @BindView(R.id.movie_image) ImageView movieImage;
+        @BindView(R.id.tv_year) TextView tv_year;
+        @BindView(R.id.tv_title) TextView tv_title;
+        @BindView(R.id.tv_rating) TextView tv_rating;
 
         public NowPlayingViewHolder(View itemView) {
             super(itemView);
-
-            movieImage = (ImageView) itemView.findViewById(R.id.movie_image);
-            tv_year = (TextView) itemView.findViewById(R.id.tv_year);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
-            tv_rating = (TextView) itemView.findViewById(R.id.tv_rating);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             ImageView movieImage = (ImageView) view.findViewById(R.id.movie_image);
-            Log.d("MovieAdapter",getAdapterPosition()+"");
             MovieObject movieObject = movieList.get(getAdapterPosition());
             onItemClickListner.onItemClick(movieObject.getId(),movieImage,movieObject.getPosterPath());
         }

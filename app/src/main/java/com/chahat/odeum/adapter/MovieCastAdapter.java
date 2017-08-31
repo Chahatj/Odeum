@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -65,15 +67,13 @@ public class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.Cast
 
     public class CastViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView imageViewProfile;
-        private TextView textViewName,textViewAs;
+        @BindView(R.id.imageViewProfile) CircleImageView imageViewProfile;
+        @BindView(R.id.textViewName) TextView textViewName;
+        @BindView(R.id.textViewAs) TextView textViewAs;
 
         public CastViewHolder(View itemView) {
             super(itemView);
-
-            imageViewProfile = (CircleImageView) itemView.findViewById(R.id.imageViewProfile);
-            textViewAs = (TextView) itemView.findViewById(R.id.textViewAs);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewName);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

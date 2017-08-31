@@ -16,6 +16,9 @@ import com.chahat.odeum.object.MovieReviewObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by chahat on 29/8/17.
  */
@@ -62,12 +65,12 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
     public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView textViewAuthor,textViewContent;
+        @BindView(R.id.textViewAuthor) TextView textViewAuthor;
+        @BindView(R.id.textViewContent) TextView textViewContent;
 
         public ReviewViewHolder(View itemView) {
             super(itemView);
-            textViewAuthor = (TextView) itemView.findViewById(R.id.textViewAuthor);
-            textViewContent = (TextView) itemView.findViewById(R.id.textViewContent);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 

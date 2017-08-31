@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.activity.SimilarMovieActivity;
@@ -56,7 +57,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 25/8/17.
  */
 
-public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItemClickListner,View.OnClickListener {
+public class InfoFragment extends Fragment implements SharedItemClickListner,View.OnClickListener {
 
     private int id;
     private static final String TAG = "InfoFragment";

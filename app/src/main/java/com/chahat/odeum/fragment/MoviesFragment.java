@@ -25,6 +25,10 @@ public class MoviesFragment extends Fragment {
     CharSequence Titles[]={"NOW PLAYING","UPCOMING","POPULAR","TOP RATED"};
     int Numboftabs = 4;
 
+    public static MoviesFragment newInstance(){
+        return new MoviesFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

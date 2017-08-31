@@ -193,7 +193,6 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("MovieDetail",t.toString());
             }
         });
     }

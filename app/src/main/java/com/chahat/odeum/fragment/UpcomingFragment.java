@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.adapter.MovieAdapter;
@@ -40,7 +42,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 24/8/17.
  */
 
-public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,UpcomingMovieAdapter.LoadListner,UpcomingMovieAdapter.OnItemClick {
+public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,LoadPagesInterface,SharedItemClickListner {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private UpcomingMovieAdapter movieAdapter;
@@ -119,11 +121,6 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void loadMorePages(int page) {
-        fetchData(page);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(SAVEINSTANCE_RECYCLERSTATE,mRecyclerState);
@@ -145,5 +142,10 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
         intent.putExtra("ImageURL",imageURL);
         intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
+    }
+
+    @Override
+    public void loadPage(int page) {
+        fetchData(page);
     }
 }

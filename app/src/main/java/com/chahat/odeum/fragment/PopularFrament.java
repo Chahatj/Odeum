@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.adapter.MovieAdapter;
@@ -37,7 +39,7 @@ import static com.chahat.odeum.BuildConfig.API_KEY;
  * Created by chahat on 24/8/17.
  */
 
-public class PopularFrament extends Fragment implements SwipeRefreshLayout.OnRefreshListener,MovieAdapter.LoadListner,MovieAdapter.OnItemClickListner {
+public class PopularFrament extends Fragment implements SwipeRefreshLayout.OnRefreshListener,LoadPagesInterface,SharedItemClickListner {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private  MovieAdapter movieAdapter;
@@ -115,10 +117,6 @@ public class PopularFrament extends Fragment implements SwipeRefreshLayout.OnRef
         fetchData(1);
     }
 
-    @Override
-    public void loadMorePages(int page) {
-        fetchData(page);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -142,5 +140,10 @@ public class PopularFrament extends Fragment implements SwipeRefreshLayout.OnRef
         intent.putExtra("ImageURL",imageUrl);
         intent.putExtra(ACTIVITY_NAME,TAG);
         startActivity(intent,bundle);
+    }
+
+    @Override
+    public void loadPage(int page) {
+        fetchData(page);
     }
 }

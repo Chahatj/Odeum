@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.object.MovieObject;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +30,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by chahat on 24/8/17.
@@ -37,10 +44,10 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
     private Context context;
     private int totalPages;
     private int currentPage;
-    private LoadListner mLoadListner;
-    private OnItemClick onItemClick;
+    private LoadPagesInterface mLoadListner;
+    private SharedItemClickListner onItemClick;
 
-    public UpcomingMovieAdapter(Context context,LoadListner loadListner,OnItemClick onItemClick){
+    public UpcomingMovieAdapter(Context context,LoadPagesInterface loadListner,SharedItemClickListner onItemClick){
         this.context = context;
         mLoadListner = loadListner;
         movieList = new ArrayList<>();
@@ -86,10 +93,6 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
         return new NowPlayingViewHolder(view);
     }
 
-    public interface LoadListner{
-        void loadMorePages(int page);
-    }
-
     public interface OnItemClick{
         void onItemClick(int id, ImageView imageView,String imageUrl);
     }
@@ -118,7 +121,7 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
         if (position == movieList.size() - 1){
             if (currentPage<totalPages){
                 currentPage = currentPage + 1;
-                mLoadListner.loadMorePages(currentPage);
+                mLoadListner.loadPage(currentPage);
             }
         }
     }
@@ -134,17 +137,15 @@ public class UpcomingMovieAdapter extends RecyclerView.Adapter<UpcomingMovieAdap
 
     public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ImageView movieImage;
-        private TextView tv_year,tv_title,tv_rating,tv_date;
+        @BindView(R.id.movie_image) ImageView movieImage;
+        @BindView(R.id.tv_year) TextView tv_year;
+        @BindView(R.id.tv_title) TextView tv_title;
+        @BindView(R.id.tv_rating)  TextView tv_rating;
+        @BindView(R.id.tv_date) TextView tv_date;
 
         public NowPlayingViewHolder(View itemView) {
             super(itemView);
-
-            movieImage = (ImageView) itemView.findViewById(R.id.movie_image);
-            tv_year = (TextView) itemView.findViewById(R.id.tv_year);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
-            tv_rating = (TextView) itemView.findViewById(R.id.tv_rating);
-            tv_date = (TextView) itemView.findViewById(R.id.tv_date);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 

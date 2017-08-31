@@ -1,6 +1,7 @@
 package com.chahat.odeum.api;
 
 import com.chahat.odeum.object.MovieResponse;
+import com.chahat.odeum.object.PeopleResponse;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -33,4 +34,6 @@ public interface ApiInterface {
     Call<ResponseBody> getMovieReview(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/similar")
     Call<MovieResponse> getSimilarMovie(@Path("id") int id,@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("person/popular")
+    Call<PeopleResponse> getPopularPeople(@Query("api_key") String API_KEY,@Query("page") int page);
 }

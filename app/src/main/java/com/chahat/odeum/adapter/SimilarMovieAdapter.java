@@ -8,13 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.object.MovieObject;
 import com.squareup.picasso.Picasso;
 
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by chahat on 29/8/17.
@@ -24,9 +29,9 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
 
     private List<MovieObject> movieList;
     private Context context;
-    private OnItemClickListner onItemClickListner;
+    private SharedItemClickListner onItemClickListner;
 
-    public SimilarMovieAdapter(Context context,OnItemClickListner onItemClickListner){
+    public SimilarMovieAdapter(Context context,SharedItemClickListner onItemClickListner){
         this.context = context;
         movieList = new ArrayList<>();
         this.onItemClickListner = onItemClickListner;
@@ -83,15 +88,13 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
 
     public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ImageView movieImage;
-        private TextView tv_year,tv_title,tv_rating;
+        @BindView(R.id.imageViewMovie) ImageView movieImage;
+        @BindView(R.id.textViewYear) TextView tv_year;
+        @BindView(R.id.textViewName) TextView tv_title;
 
         public NowPlayingViewHolder(View itemView) {
             super(itemView);
-
-            movieImage = (ImageView) itemView.findViewById(R.id.imageViewMovie);
-            tv_year = (TextView) itemView.findViewById(R.id.textViewYear);
-            tv_title = (TextView) itemView.findViewById(R.id.textViewName);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 

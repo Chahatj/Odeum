@@ -1,10 +1,13 @@
 package com.chahat.odeum.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,14 +20,22 @@ import android.view.MenuItem;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.fragment.MoviesFragment;
+import com.chahat.odeum.fragment.PopularPeopleFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -41,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
         if (savedInstanceState==null){
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_frame,new MoviesFragment(),null)
+                    .add(R.id.main_frame,MoviesFragment.newInstance(),null)
                     .commit();
         }
 
@@ -86,10 +97,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_movies) {
-            // Handle the camera action
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame,MoviesFragment.newInstance(),null)
+                    .commit();
         } else if (id == R.id.nav_tv_shows) {
 
         } else if (id == R.id.nav_popular_people) {
+            PopularPeopleFragment popularPeopleFragment = PopularPeopleFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame,popularPeopleFragment,null)
+                    .commit();
 
         } else if (id == R.id.nav_contact) {
             Intent intent = new Intent(this,ContactActivity.class);

@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.adapter.MovieAdapter;
 import com.chahat.odeum.api.ApiClient;
@@ -33,7 +35,7 @@ import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
 
-public class SimilarMovieActivity extends AppCompatActivity implements MovieAdapter.LoadListner,MovieAdapter.OnItemClickListner {
+public class SimilarMovieActivity extends AppCompatActivity implements LoadPagesInterface,SharedItemClickListner {
 
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -159,7 +161,7 @@ public class SimilarMovieActivity extends AppCompatActivity implements MovieAdap
     }
 
     @Override
-    public void loadMorePages(int page) {
+    public void loadPage(int page) {
         getSimilarMovies(page);
     }
 }
