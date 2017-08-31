@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chahat.odeum.Interface.LoadPagesInterface;
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.object.PeopleObject;
@@ -31,12 +32,14 @@ public class PopularPeopleAdapter extends RecyclerView.Adapter<PopularPeopleAdap
     private int currentPage;
     private int totalPages;
     private LoadPagesInterface mLoadPageListner;
+    private SharedItemClickListner mItemClickListner;
 
-    public PopularPeopleAdapter(Context context,LoadPagesInterface loadPagesListner){
+    public PopularPeopleAdapter(Context context,LoadPagesInterface loadPagesListner,SharedItemClickListner clickListner){
         this.context  = context;
         peopleList = new ArrayList<>();
         currentPage = 1;
         this.mLoadPageListner = loadPagesListner;
+        this.mItemClickListner = clickListner;
     }
 
     @Override
@@ -97,7 +100,7 @@ public class PopularPeopleAdapter extends RecyclerView.Adapter<PopularPeopleAdap
         else return 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.imageViewProfile) CircleImageView imageViewProfile;
         @BindView(R.id.textViewName) TextView textViewName;
@@ -105,6 +108,13 @@ public class PopularPeopleAdapter extends RecyclerView.Adapter<PopularPeopleAdap
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            PeopleObject peopleObject = peopleList.get(getAdapterPosition());
+            mItemClickListner.onItemClick(peopleObject.getId(),imageViewProfile,peopleObject.getProfilePath());
         }
     }
 }
