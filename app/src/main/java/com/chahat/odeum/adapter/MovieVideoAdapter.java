@@ -57,6 +57,10 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Mo
         notifyDataSetChanged();
     }
 
+    public List<MovieVideoObject> getVideoList() {
+        return videoList;
+    }
+
     public class MovieVideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imageViewVideo;

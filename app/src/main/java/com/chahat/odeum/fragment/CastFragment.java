@@ -1,6 +1,7 @@
 package com.chahat.odeum.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.adapter.MovieCastAdapter;
@@ -41,7 +43,12 @@ public class CastFragment extends Fragment {
     private static final String TAG = "CastFragment";
     private int id;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
     private MovieCastAdapter movieCastAdapter;
+    private static final String SAVE_ID = "id";
+    private static final String SAVE_LIST = "list";
+    private static final String SAVE_RECYCLER_STATE = "recyclerstate";
+    private Parcelable mRecyclerState;
 
     @Nullable
     @Override
@@ -54,7 +61,15 @@ public class CastFragment extends Fragment {
         recyclerView.setNestedScrollingEnabled(false);
         movieCastAdapter = new MovieCastAdapter(getContext());
         recyclerView.setAdapter(movieCastAdapter);
-        getMovieCast(id);
+
+        if (savedInstanceState==null){
+            getMovieCast(id);
+        }else {
+            movieCastAdapter.setMovieCastList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_LIST));
+            mRecyclerState = savedInstanceState.getParcelable(SAVE_RECYCLER_STATE);
+            recyclerView.getLayoutManager().onRestoreInstanceState(mRecyclerState);
+        }
+
         return view;
     }
 
@@ -70,7 +85,21 @@ public class CastFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        id = getArguments().getInt(TAG);
+        if (savedInstanceState==null){
+            id = getArguments().getInt(TAG);
+        }else {
+            id = savedInstanceState.getInt(SAVE_ID);
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putInt(SAVE_ID,id);
+        outState.putParcelableArrayList(SAVE_LIST, (ArrayList<? extends Parcelable>) movieCastAdapter.getMovieCastList());
+        outState.putParcelable(SAVE_RECYCLER_STATE,mRecyclerState);
     }
 
     private void getMovieCast(int id){
@@ -85,22 +114,28 @@ public class CastFragment extends Fragment {
                     String res = response.body().string();
                     JSONObject jsonObject = new JSONObject(res);
                     JSONArray jsonArray = jsonObject.getJSONArray("cast");
-                    List<MovieCastObject> castList = new ArrayList<MovieCastObject>();
 
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        MovieCastObject movieCastObject = new MovieCastObject();
-                        movieCastObject.setId(jsonObject1.getInt("id"));
-                        movieCastObject.setCastId(jsonObject1.getInt("cast_id"));
-                        movieCastObject.setName(jsonObject1.getString("name"));
-                        movieCastObject.setCharacter(jsonObject1.getString("character"));
-                        movieCastObject.setCreditId(jsonObject1.getString("credit_id"));
-                        movieCastObject.setProfile(jsonObject1.getString("profile_path"));
+                    if (jsonArray.length()!=0){
+                        showResult();
+                        List<MovieCastObject> castList = new ArrayList<MovieCastObject>();
 
-                        castList.add(movieCastObject);
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            MovieCastObject movieCastObject = new MovieCastObject();
+                            movieCastObject.setId(jsonObject1.getInt("id"));
+                            movieCastObject.setCastId(jsonObject1.getInt("cast_id"));
+                            movieCastObject.setName(jsonObject1.getString("name"));
+                            movieCastObject.setCharacter(jsonObject1.getString("character"));
+                            movieCastObject.setCreditId(jsonObject1.getString("credit_id"));
+                            movieCastObject.setProfile(jsonObject1.getString("profile_path"));
+
+                            castList.add(movieCastObject);
+                        }
+                        movieCastAdapter.setMovieCastList(castList);
+                    }else {
+                        showError();
                     }
 
-                    movieCastAdapter.setMovieCastList(castList);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,8 +143,18 @@ public class CastFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                showError();
             }
         });
+    }
+
+    private void showError(){
+        recyclerView.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerView.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
     }
 }

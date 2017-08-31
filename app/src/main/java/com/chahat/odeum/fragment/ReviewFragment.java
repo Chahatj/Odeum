@@ -1,6 +1,7 @@
 package com.chahat.odeum.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.adapter.MovieReviewAdapter;
@@ -42,7 +45,12 @@ public class ReviewFragment extends Fragment {
     private static final String TAG = "ReviewFragment";
     private int id;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
     private MovieReviewAdapter reviewAdapter;
+    private static final String SAVE_ID = "id";
+    private static final String SAVE_LIST = "list";
+    private static final String SAVE_RECYCLER_STATE = "recyclerState";
+    private Parcelable mRecyclerState;
 
     public static ReviewFragment newInstance(int id){
         ReviewFragment reviewFragment = new ReviewFragment();
@@ -66,7 +74,14 @@ public class ReviewFragment extends Fragment {
         reviewAdapter= new MovieReviewAdapter(getContext());
         recyclerView.setAdapter(reviewAdapter);
 
-        getMovieReview(id);
+        if (savedInstanceState==null){
+            getMovieReview(id);
+        }else {
+            reviewAdapter.setReviewList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_LIST));
+            mRecyclerState = savedInstanceState.getParcelable(SAVE_RECYCLER_STATE);
+            recyclerView.getLayoutManager().onRestoreInstanceState(mRecyclerState);
+        }
+
 
         return view;
     }
@@ -75,7 +90,21 @@ public class ReviewFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        id = getArguments().getInt(TAG);
+        if (savedInstanceState==null){
+            id = getArguments().getInt(TAG);
+        }else {
+            id = savedInstanceState.getInt(SAVE_ID);
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putInt(SAVE_ID,id);
+        outState.putParcelableArrayList(SAVE_LIST, (ArrayList<? extends Parcelable>) reviewAdapter.getReviewList());
+        outState.putParcelable(SAVE_RECYCLER_STATE,mRecyclerState);
     }
 
     private void getMovieReview(int id){
@@ -87,29 +116,49 @@ public class ReviewFragment extends Fragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String res = response.body().string();
+                    Log.d(TAG,res);
                     JSONObject jsonObject = new JSONObject(res);
                     JSONArray jsonArray = jsonObject.getJSONArray("results");
-                    List<MovieReviewObject> movieReviewList = new ArrayList<MovieReviewObject>();
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        MovieReviewObject movieReviewObject = new MovieReviewObject();
-                        movieReviewObject.setId(jsonObject1.getString("id"));
-                        movieReviewObject.setAuthor(jsonObject1.getString("author"));
-                        movieReviewObject.setContent(jsonObject1.getString("content"));
-                        movieReviewObject.setUrl(jsonObject1.getString("url"));
+                    if (jsonArray.length()!=0){
+                        showResult();
+                        List<MovieReviewObject> movieReviewList = new ArrayList<MovieReviewObject>();
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            MovieReviewObject movieReviewObject = new MovieReviewObject();
+                            movieReviewObject.setId(jsonObject1.getString("id"));
+                            movieReviewObject.setAuthor(jsonObject1.getString("author"));
+                            movieReviewObject.setContent(jsonObject1.getString("content"));
+                            movieReviewObject.setUrl(jsonObject1.getString("url"));
 
-                        movieReviewList.add(movieReviewObject);
+                            movieReviewList.add(movieReviewObject);
+                        }
+                        reviewAdapter.setReviewList(movieReviewList);
+                    }else {
+                        showError();
                     }
-                    reviewAdapter.setReviewList(movieReviewList);
+
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.d(TAG,e.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                showError();
+                Log.d(TAG,t.toString());
             }
         });
+
+    }
+
+    private void showError(){
+        recyclerView.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerView.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
     }
 }

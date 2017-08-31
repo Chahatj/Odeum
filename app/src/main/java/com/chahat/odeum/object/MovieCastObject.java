@@ -1,13 +1,41 @@
 package com.chahat.odeum.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by chahat on 29/8/17.
  */
 
-public class MovieCastObject {
+public class MovieCastObject implements Parcelable{
 
     private String character,name,profile,creditId;
     private int castId,id;
+
+    public MovieCastObject(){
+
+    }
+
+    protected MovieCastObject(Parcel in) {
+        character = in.readString();
+        name = in.readString();
+        profile = in.readString();
+        creditId = in.readString();
+        castId = in.readInt();
+        id = in.readInt();
+    }
+
+    public static final Creator<MovieCastObject> CREATOR = new Creator<MovieCastObject>() {
+        @Override
+        public MovieCastObject createFromParcel(Parcel in) {
+            return new MovieCastObject(in);
+        }
+
+        @Override
+        public MovieCastObject[] newArray(int size) {
+            return new MovieCastObject[size];
+        }
+    };
 
     public String getCharacter() {
         return character;
@@ -55,5 +83,20 @@ public class MovieCastObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(character);
+        parcel.writeString(name);
+        parcel.writeString(profile);
+        parcel.writeString(creditId);
+        parcel.writeInt(castId);
+        parcel.writeInt(id);
     }
 }

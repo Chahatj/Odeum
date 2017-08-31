@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chahat.odeum.R;
@@ -67,9 +69,23 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
     @BindView(R.id.recyclerViewTrailer) RecyclerView recyclerViewTrailer;
     @BindView(R.id.recyclerViewMovies) RecyclerView recyclerViewMovies;
     @BindView(R.id.textViewAll) TextView textViewAll;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
+    @BindView(R.id.noResultSimilar) LinearLayout noResultSimilar;
     private MovieVideoAdapter movieVideoAdapter;
     private SimilarMovieAdapter similarMovieAdapter;
     public static final String ACTIVITY_NAME = "activityname";
+    private static final String SAVE_ID = "id";
+    private static final String SAVE_RATING = "rating";
+    private static final String SAVE_OVERVIEW = "overview";
+    private static final String SAVE_RELEASE_DATE = "releaseDate";
+    private static final String SAVE_PRODUCED = "produced";
+    private static final String SAVE_BUDGET = "budget";
+    private static final String SAVE_REVENUE = "revenue";
+    private static final String SAVE_RECYCLER_TRAILOR = "trailor";
+    private static final String SAVE_RECYCLER_MOVIES = "movies";
+    private static final String SAVE_STATE_MOVIES = "recyclerStateMovies";
+    private static final String SAVE_STATE_TRAILOR = "recyclerStateTrailor";
+    private Parcelable mRecyclerStateTrailor,mRecyclerStateMovies;
 
     @Nullable
     @Override
@@ -93,9 +109,25 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
         similarMovieAdapter = new SimilarMovieAdapter(getContext(),this);
         recyclerViewMovies.setAdapter(similarMovieAdapter);
 
-        getMovieInfo(id);
-        getMovieTrailer(id);
-        getSimilarMovie(id);
+        if (savedInstanceState==null){
+            getMovieInfo(id);
+            getMovieTrailer(id);
+            getSimilarMovie(id);
+        }else {
+            textViewRating.setText(savedInstanceState.getString(SAVE_RATING));
+            textViewOverview.setText(savedInstanceState.getString(SAVE_OVERVIEW));
+            textViewReleaseDate.setText(savedInstanceState.getString(SAVE_RELEASE_DATE));
+            textViewProducedBy.setText(savedInstanceState.getString(SAVE_PRODUCED));
+            textViewBudget.setText(savedInstanceState.getString(SAVE_BUDGET));
+            textViewRevenue.setText(savedInstanceState.getString(SAVE_REVENUE));
+            movieVideoAdapter.setVideoList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_RECYCLER_TRAILOR));
+            similarMovieAdapter.setMovieList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_RECYCLER_MOVIES));
+            mRecyclerStateTrailor = savedInstanceState.getParcelable(SAVE_STATE_TRAILOR);
+            recyclerViewTrailer.getLayoutManager().onRestoreInstanceState(mRecyclerStateTrailor);
+            mRecyclerStateMovies = savedInstanceState.getParcelable(SAVE_STATE_MOVIES);
+            recyclerViewMovies.getLayoutManager().onRestoreInstanceState(mRecyclerStateMovies);
+        }
+
         return view;
     }
 
@@ -108,10 +140,32 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mRecyclerStateMovies = recyclerViewMovies.getLayoutManager().onSaveInstanceState();
+        mRecyclerStateTrailor = recyclerViewTrailer.getLayoutManager().onSaveInstanceState();
+        outState.putInt(SAVE_ID,id);
+        outState.putString(SAVE_RATING,textViewRating.getText().toString());
+        outState.putString(SAVE_OVERVIEW,textViewOverview.getText().toString());
+        outState.putString(SAVE_RELEASE_DATE,textViewReleaseDate.getText().toString());
+        outState.putString(SAVE_PRODUCED,textViewProducedBy.getText().toString());
+        outState.putString(SAVE_BUDGET,textViewBudget.getText().toString());
+        outState.putString(SAVE_REVENUE,textViewRevenue.getText().toString());
+        outState.putParcelableArrayList(SAVE_RECYCLER_TRAILOR, (ArrayList<? extends Parcelable>) movieVideoAdapter.getVideoList());
+        outState.putParcelableArrayList(SAVE_RECYCLER_MOVIES, (ArrayList<? extends Parcelable>) similarMovieAdapter.getMovieList());
+        outState.putParcelable(SAVE_STATE_TRAILOR,mRecyclerStateTrailor);
+        outState.putParcelable(SAVE_STATE_MOVIES,mRecyclerStateMovies);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState==null){
+            id = getArguments().getInt(TAG);
+        }else {
+            id = savedInstanceState.getInt(SAVE_ID);
+        }
 
-        id = getArguments().getInt(TAG);
     }
 
     private void getMovieInfo(int id){
@@ -204,21 +258,27 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
                     JSONObject jsonObject = new JSONObject(res);
                     JSONArray jsonArray = jsonObject.getJSONArray("results");
 
-                    List<MovieVideoObject> videoList = new ArrayList<MovieVideoObject>();
+                    if (jsonArray.length()!=0){
+                        showResult();
+                        List<MovieVideoObject> videoList = new ArrayList<MovieVideoObject>();
 
-                    for (int i=0;i<jsonArray.length();i++){
-                        MovieVideoObject movieVideoObject = new MovieVideoObject();
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        movieVideoObject.setId(jsonObject1.getString("id"));
-                        movieVideoObject.setKey(jsonObject1.getString("key"));
-                        movieVideoObject.setName(jsonObject1.getString("name"));
-                        movieVideoObject.setSite(jsonObject1.getString("site"));
-                        movieVideoObject.setType(jsonObject1.getString("type"));
+                        for (int i=0;i<jsonArray.length();i++){
+                            MovieVideoObject movieVideoObject = new MovieVideoObject();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            movieVideoObject.setId(jsonObject1.getString("id"));
+                            movieVideoObject.setKey(jsonObject1.getString("key"));
+                            movieVideoObject.setName(jsonObject1.getString("name"));
+                            movieVideoObject.setSite(jsonObject1.getString("site"));
+                            movieVideoObject.setType(jsonObject1.getString("type"));
 
-                        videoList.add(movieVideoObject);
+                            videoList.add(movieVideoObject);
+                        }
+
+                        movieVideoAdapter.setVideoList(videoList);
+                    }else {
+                        showError();
                     }
 
-                    movieVideoAdapter.setVideoList(videoList);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -232,6 +292,26 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
         });
     }
 
+    private void showError(){
+        recyclerViewTrailer.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerViewTrailer.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
+    }
+
+    private void showErrorSimilar(){
+        recyclerViewMovies.setVisibility(View.GONE);
+        noResultSimilar.setVisibility(View.VISIBLE);
+    }
+
+    private void showResultSimilar(){
+        recyclerViewMovies.setVisibility(View.VISIBLE);
+        noResultSimilar.setVisibility(View.GONE);
+    }
+
     private void getSimilarMovie(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieResponse> call = apiInterface.getSimilarMovie(id,API_KEY,1);
@@ -239,12 +319,18 @@ public class InfoFragment extends Fragment implements SimilarMovieAdapter.OnItem
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 List<MovieObject> list = response.body().getMovieList();
-                similarMovieAdapter.setMovieList(list);
+                if (list.size()!=0){
+                    showResultSimilar();
+                    similarMovieAdapter.setMovieList(list);
+                }else {
+                    showErrorSimilar();
+                }
+
             }
 
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
-
+                showErrorSimilar();
             }
         });
     }

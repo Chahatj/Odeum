@@ -157,12 +157,23 @@
             android:textSize="18sp"
             android:layout_marginTop="12dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewTrailer"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
-        </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewTrailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+            <include layout="@layout/no_result" android:id="@+id/noResult"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
+
 
         <View
             android:layout_width="match_parent"
@@ -196,13 +207,23 @@
         </LinearLayout>
 
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewMovies"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp">
-        </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+            <include layout="@layout/no_result" android:id="@+id/noResultSimilar"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
+
 
 
     </LinearLayout>

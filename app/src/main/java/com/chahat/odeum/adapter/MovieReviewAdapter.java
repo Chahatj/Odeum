@@ -56,6 +56,10 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
         else return 0;
     }
 
+    public List<MovieReviewObject> getReviewList() {
+        return reviewList;
+    }
+
     public class ReviewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView textViewAuthor,textViewContent;

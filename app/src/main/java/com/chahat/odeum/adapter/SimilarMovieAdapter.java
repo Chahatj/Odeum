@@ -80,6 +80,7 @@ public class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapte
         }
     }
 
+
     public class NowPlayingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView movieImage;

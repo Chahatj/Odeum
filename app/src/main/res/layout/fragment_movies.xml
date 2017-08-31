@@ -13,7 +13,6 @@
         app:tabGravity="fill"
         app:tabTextColor="@color/tabTextColor"
         app:tabSelectedTextColor="@android:color/white"
-        app:tabMode="scrollable"
         android:elevation="@dimen/tab_layout_elevation"
         app:tabIndicatorHeight="@dimen/tab_indicator_height">
     </android.support.design.widget.TabLayout>

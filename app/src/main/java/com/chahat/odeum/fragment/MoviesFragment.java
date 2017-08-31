@@ -1,5 +1,6 @@
 package com.chahat.odeum.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -37,8 +38,13 @@ public class MoviesFragment extends Fragment {
         tabs = (TabLayout) view.findViewById(R.id.sliding_layout);
         tabs.setupWithViewPager(pager);
 
-
+        if (getActivity().getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT){
+            tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }else {
+            tabs.setTabMode(TabLayout.MODE_FIXED);
+        }
 
         return view;
     }
+
 }

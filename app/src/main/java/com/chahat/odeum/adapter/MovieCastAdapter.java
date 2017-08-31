@@ -53,6 +53,10 @@ public class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.Cast
         holder.textViewAs.setText(movieCastObject.getCharacter());
     }
 
+    public List<MovieCastObject> getMovieCastList() {
+        return movieCastList;
+    }
+
     @Override
     public int getItemCount() {
         if (movieCastList!=null) return movieCastList.size();

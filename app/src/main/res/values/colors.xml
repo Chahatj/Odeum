@@ -6,4 +6,5 @@
     <color name="tabTextColor">#E0E0E0</color>
     <color name="movieDbPrimaryColor">#01d277</color>
     <color name="white">#ffffff</color>
+    <color name="lightGrey">#D3D3D3</color>
 </resources>

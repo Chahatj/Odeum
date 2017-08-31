@@ -16,10 +16,21 @@
         app:theme="@style/ToolbarStyle">
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerView">
+        </android.support.v7.widget.RecyclerView>
+
+        <include layout="@layout/no_result" android:id="@+id/noResult"
+            android:visibility="gone"/>
+
+
+    </FrameLayout>
+
 
 </LinearLayout>

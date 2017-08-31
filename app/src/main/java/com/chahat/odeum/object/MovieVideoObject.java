@@ -1,12 +1,39 @@
 package com.chahat.odeum.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by chahat on 29/8/17.
  */
 
-public class MovieVideoObject {
+public class MovieVideoObject implements Parcelable {
 
     private String id,key,name,site,type;
+
+    public MovieVideoObject(){
+
+    }
+
+    protected MovieVideoObject(Parcel in) {
+        id = in.readString();
+        key = in.readString();
+        name = in.readString();
+        site = in.readString();
+        type = in.readString();
+    }
+
+    public static final Creator<MovieVideoObject> CREATOR = new Creator<MovieVideoObject>() {
+        @Override
+        public MovieVideoObject createFromParcel(Parcel in) {
+            return new MovieVideoObject(in);
+        }
+
+        @Override
+        public MovieVideoObject[] newArray(int size) {
+            return new MovieVideoObject[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -46,5 +73,19 @@ public class MovieVideoObject {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(key);
+        parcel.writeString(name);
+        parcel.writeString(site);
+        parcel.writeString(type);
     }
 }
