@@ -45,8 +45,8 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     PopularPeopleAdapter popularPeopleAdapter;
-    private static final String INTENT_ID = "id";
-    private static final String INTENT_IMAGE = "image";
+    public static final String INTENT_ID = "id";
+    public static final String INTENT_IMAGE = "image";
     private Parcelable mRecyclerState;
     private static final String SAVEINSTANCE_RECYCLERSTATE = "RecyclerState";
     private static final String SAVEINSTANCE_LIST = "movielist";
@@ -124,13 +124,14 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
 
     @Override
     public void onItemClick(int id, ImageView imageView, String imageURL) {
+        Bundle bundle = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setTransitionName(getString(R.string.transition_photo));
-            ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName());
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName()).toBundle();
         }
         Intent intent = new Intent(getContext(),PeopleDetailActivity.class);
         intent.putExtra(INTENT_ID,id);
         intent.putExtra(INTENT_IMAGE,imageURL);
-        startActivity(intent);
+        startActivity(intent,bundle);
     }
 }
