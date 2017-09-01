@@ -26,4 +26,7 @@
     <string name="email">Email:</string>
     <string name="my_email">chahat.jain0@gmail.com</string>
     <string name="contact_us">Contact us</string>
+    <string name="born">Born:</string>
+    <string name="birthplace">Birthplace:</string>
+    <string name="images">Images</string>
 </resources>
