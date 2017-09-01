@@ -51,4 +51,6 @@ public interface ApiInterface {
     Call<TvShowResponse> getAiringTodayShow(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("tv/on_the_air")
     Call<TvShowResponse> getOnTheAirShow(@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("tv/popular")
+    Call<TvShowResponse> getPopularTvShow(@Query("api_key") String API_KEY,@Query("page") int page);
 }
