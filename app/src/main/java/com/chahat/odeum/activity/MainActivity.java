@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import com.chahat.odeum.R;
 import com.chahat.odeum.fragment.MoviesFragment;
 import com.chahat.odeum.fragment.PopularPeopleFragment;
+import com.chahat.odeum.fragment.TvShowsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,7 +102,10 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.main_frame,MoviesFragment.newInstance(),null)
                     .commit();
         } else if (id == R.id.nav_tv_shows) {
-
+            TvShowsFragment tvShowsFragment = TvShowsFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame,tvShowsFragment,null)
+                    .commit();
         } else if (id == R.id.nav_popular_people) {
             PopularPeopleFragment popularPeopleFragment = PopularPeopleFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
