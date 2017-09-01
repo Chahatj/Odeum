@@ -29,4 +29,5 @@
     <string name="born">Born:</string>
     <string name="birthplace">Birthplace:</string>
     <string name="images">Images</string>
+    <string name="people_movies_transition_photo">PeopleMoviesTransitionPhoto</string>
 </resources>

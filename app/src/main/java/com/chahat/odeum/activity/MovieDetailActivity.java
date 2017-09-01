@@ -28,6 +28,7 @@ import com.chahat.odeum.adapter.ViewPagerAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.fragment.NowplayingFragment;
+import com.chahat.odeum.fragment.PeopleMoviesFragment;
 import com.chahat.odeum.object.MovieDetailObject;
 import com.squareup.picasso.Picasso;
 
@@ -89,7 +90,10 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
                 if (intent.hasExtra(NowplayingFragment.ACTIVITY_NAME)){
                     if (intent.getStringExtra(NowplayingFragment.ACTIVITY_NAME).equals(NowplayingFragment.TAG)){
                         movie_poster.setTransitionName(getString(R.string.transition_photo));
-                    }else {
+                    }else if (intent.getStringExtra(NowplayingFragment.ACTIVITY_NAME).equals(PeopleMoviesFragment.TAG)){
+                        movie_poster.setTransitionName(getString(R.string.people_movies_transition_photo));
+                    }
+                    else {
                         movie_poster.setTransitionName(getString(R.string.similar_transition_photo));
                     }
                 }

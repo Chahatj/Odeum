@@ -1,7 +1,9 @@
 package com.chahat.odeum.api;
 
+import com.chahat.odeum.fragment.PeopleMoviesFragment;
 import com.chahat.odeum.object.MovieResponse;
 import com.chahat.odeum.object.PeopleDetailResponse;
+import com.chahat.odeum.object.PeopleMovieResponse;
 import com.chahat.odeum.object.PeopleResponse;
 import com.chahat.odeum.object.ProfileImageResponse;
 
@@ -42,4 +44,6 @@ public interface ApiInterface {
     Call<PeopleDetailResponse> getpeopleDetail(@Path("person_id") int id,@Query("api_key") String API_KEY);
     @GET("person/{person_id}/images")
     Call<ProfileImageResponse> getPeopleImages(@Path("person_id") int id,@Query("api_key") String API_KEY);
+    @GET("person/{person_id}/movie_credits")
+    Call<PeopleMovieResponse> getPeopleMovieList(@Path("person_id") int id,@Query("api_key") String API_KEY);
 }

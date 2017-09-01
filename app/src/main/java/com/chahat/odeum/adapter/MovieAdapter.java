@@ -90,8 +90,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.NowPlayingVi
         holder.tv_rating.setText(String.valueOf(movieObject.getVoteAverage()));
         holder.tv_title.setText(movieObject.getTitle());
 
-        String[] date = movieObject.getReleaseDate().split("-");
-        holder.tv_year.setText(String.valueOf(date[0]));
+        if (movieObject.getReleaseDate()!=null){
+            String[] date = movieObject.getReleaseDate().split("-");
+            holder.tv_year.setText(String.valueOf(date[0]));
+        }
+
 
         if (position == movieList.size() - 1){
             if (currentPage<totalPages){
