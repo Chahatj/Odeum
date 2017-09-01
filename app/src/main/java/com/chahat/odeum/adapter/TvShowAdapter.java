@@ -109,7 +109,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (tvShowList.size()!=0){
+        if (tvShowList!=null){
             return tvShowList.size();
         }else {
             return 0;
