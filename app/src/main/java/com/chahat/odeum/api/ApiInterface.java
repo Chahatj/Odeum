@@ -7,6 +7,7 @@ import com.chahat.odeum.object.PeopleMovieResponse;
 import com.chahat.odeum.object.PeopleResponse;
 import com.chahat.odeum.object.PeopleTvShowResponse;
 import com.chahat.odeum.object.ProfileImageResponse;
+import com.chahat.odeum.object.TvShowDetailObject;
 import com.chahat.odeum.object.TvShowResponse;
 import com.google.gson.annotations.SerializedName;
 
@@ -59,4 +60,6 @@ public interface ApiInterface {
     Call<TvShowResponse> getPopularTvShow(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("tv/top_rated")
     Call<TvShowResponse> getTopRatedTvShow(@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("tv/{tv_id}")
+    Call<TvShowDetailObject> getTvShowDetail(@Path("tv_id") int id,@Query("api_key") String API_KEY);
 }

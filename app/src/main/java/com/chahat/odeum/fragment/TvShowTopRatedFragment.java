@@ -1,5 +1,8 @@
 package com.chahat.odeum.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -16,6 +19,7 @@ import android.widget.ImageView;
 import com.chahat.odeum.Interface.LoadPagesInterface;
 import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
+import com.chahat.odeum.activity.TvShowDetailActivity;
 import com.chahat.odeum.adapter.TvShowAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
@@ -127,7 +131,15 @@ public class TvShowTopRatedFragment extends Fragment implements SharedItemClickL
 
     @Override
     public void onItemClick(int id, ImageView imageView, String imageURL) {
-
+        Bundle bundle = new Bundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName(getString(R.string.transition_photo));
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName()).toBundle();
+        }
+        Intent intent = new Intent(getContext(), TvShowDetailActivity.class);
+        intent.putExtra("Id",id);
+        intent.putExtra("ImageURL",imageURL);
+        startActivity(intent,bundle);
     }
 
     @Override
