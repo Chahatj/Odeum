@@ -6,6 +6,7 @@ import com.chahat.odeum.object.PeopleDetailResponse;
 import com.chahat.odeum.object.PeopleMovieResponse;
 import com.chahat.odeum.object.PeopleResponse;
 import com.chahat.odeum.object.ProfileImageResponse;
+import com.chahat.odeum.object.TvShowResponse;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -46,4 +47,8 @@ public interface ApiInterface {
     Call<ProfileImageResponse> getPeopleImages(@Path("person_id") int id,@Query("api_key") String API_KEY);
     @GET("person/{person_id}/movie_credits")
     Call<PeopleMovieResponse> getPeopleMovieList(@Path("person_id") int id,@Query("api_key") String API_KEY);
+    @GET("tv/airing_today")
+    Call<TvShowResponse> getAiringTodayShow(@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("tv/on_the_air")
+    Call<TvShowResponse> getOnTheAirShow(@Query("api_key") String API_KEY,@Query("page") int page);
 }

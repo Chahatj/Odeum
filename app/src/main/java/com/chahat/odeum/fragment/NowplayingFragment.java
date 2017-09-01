@@ -107,7 +107,6 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
                     movieAdapter.addMovieList(movies);
                 }
                 movieAdapter.setTotalPages(response.body().getTotalPages());
-                Log.d("Now",response.body().getTotalPages()+"");
                 swipeRefreshLayout.setRefreshing(false);
             }
 
