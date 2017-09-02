@@ -9,6 +9,7 @@ import com.chahat.odeum.object.PeopleTvShowResponse;
 import com.chahat.odeum.object.ProfileImageResponse;
 import com.chahat.odeum.object.TvShowDetailObject;
 import com.chahat.odeum.object.TvShowResponse;
+import com.chahat.odeum.object.VideoResponse;
 import com.google.gson.annotations.SerializedName;
 
 import okhttp3.Response;
@@ -35,7 +36,7 @@ public interface ApiInterface {
     @GET("movie/{id}")
     Call<ResponseBody> getMovieDetail(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/videos")
-    Call<ResponseBody> getMovieTrailer(@Path("id") int id,@Query("api_key") String API_KEY);
+    Call<VideoResponse> getMovieTrailer(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/credits")
     Call<ResponseBody> getMovieCast(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/reviews")
@@ -62,4 +63,8 @@ public interface ApiInterface {
     Call<TvShowResponse> getTopRatedTvShow(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("tv/{tv_id}")
     Call<TvShowDetailObject> getTvShowDetail(@Path("tv_id") int id,@Query("api_key") String API_KEY);
+    @GET("tv/{tv_id}/videos")
+    Call<VideoResponse> getVideos(@Path("tv_id") int id,@Query("api_key") String  API_KEY);
+    @GET("tv/{tv_id}/similar")
+    Call<TvShowResponse> getSimilarTvShow(@Path("tv_id") int id,@Query("api_key") String API_KEY,@Query("page") int page);
 }

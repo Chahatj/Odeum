@@ -38,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_CURRENT_PAGE;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_PAGES;
@@ -53,6 +54,7 @@ public class AiringTodayFragment extends Fragment implements SharedItemClickList
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     private TvShowAdapter tvShowAdapter;
     private Parcelable mRecyclerState;
+    public static final String  TAG = "AiringTodayFragment";
 
     public static AiringTodayFragment newInstance(){
         return new AiringTodayFragment();
@@ -137,6 +139,7 @@ public class AiringTodayFragment extends Fragment implements SharedItemClickList
         Intent intent = new Intent(getContext(), TvShowDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageURL);
+        intent.putExtra(INTENT_ACTIVITY,TAG);
         startActivity(intent,bundle);
     }
 

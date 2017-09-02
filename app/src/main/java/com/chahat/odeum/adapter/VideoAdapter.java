@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.object.MovieVideoObject;
+import com.chahat.odeum.object.VideoObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ import butterknife.ButterKnife;
  * Created by chahat on 29/8/17.
  */
 
-public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.MovieVideoViewHolder> {
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MovieVideoViewHolder> {
 
-    List<MovieVideoObject> videoList;
+    List<VideoObject> videoList;
     Context context;
 
-    public MovieVideoAdapter(Context context){
+    public VideoAdapter(Context context){
         this.context = context;
         videoList = new ArrayList<>();
     }
@@ -44,9 +45,9 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Mo
 
     @Override
     public void onBindViewHolder(MovieVideoViewHolder holder, int position) {
-        MovieVideoObject movieVideoObject = videoList.get(position);
-        Picasso.with(context).load(ApiClient.YOU_TUBE_IMAGE+movieVideoObject.getKey()+"/0.jpg").into(holder.imageViewVideo);
-        holder.textViewName.setText(movieVideoObject.getName());
+        VideoObject videoObject = videoList.get(position);
+        Picasso.with(context).load(ApiClient.YOU_TUBE_IMAGE+videoObject.getKey()+"/0.jpg").into(holder.imageViewVideo);
+        holder.textViewName.setText(videoObject.getName());
     }
 
     @Override
@@ -55,12 +56,12 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Mo
         else return 0;
     }
 
-    public void setVideoList(List<MovieVideoObject> videoList) {
+    public void setVideoList(List<VideoObject> videoList) {
         this.videoList = videoList;
         notifyDataSetChanged();
     }
 
-    public List<MovieVideoObject> getVideoList() {
+    public List<VideoObject> getVideoList() {
         return videoList;
     }
 

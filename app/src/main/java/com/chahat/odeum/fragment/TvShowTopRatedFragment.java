@@ -36,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_CURRENT_PAGE;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_PAGES;
@@ -139,6 +140,7 @@ public class TvShowTopRatedFragment extends Fragment implements SharedItemClickL
         Intent intent = new Intent(getContext(), TvShowDetailActivity.class);
         intent.putExtra("Id",id);
         intent.putExtra("ImageURL",imageURL);
+        intent.putExtra(INTENT_ACTIVITY,AiringTodayFragment.TAG);
         startActivity(intent,bundle);
     }
 

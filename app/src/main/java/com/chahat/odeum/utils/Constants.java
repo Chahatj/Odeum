@@ -18,5 +18,7 @@ public class Constants {
     public static final String SAVEINSTANCE_POSTER_URL = "poster";
     public static final String SAVEINSTANCE_BANNER_URL = "banner";
     public static final String SAVEINSTANCE_GENRE = "genre";
+    public static final String SAVEINSTANCE_TRANSITION_NAME = "transitionName";
     public static final String INSTANCE_ID = "instanceId";
+    public static final String INTENT_ACTIVITY = "intentActivity";
 }

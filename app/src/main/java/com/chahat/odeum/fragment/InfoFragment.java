@@ -21,7 +21,7 @@ import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
 import com.chahat.odeum.activity.SimilarMovieActivity;
-import com.chahat.odeum.adapter.MovieVideoAdapter;
+import com.chahat.odeum.adapter.VideoAdapter;
 import com.chahat.odeum.adapter.SimilarMovieAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
@@ -29,12 +29,11 @@ import com.chahat.odeum.object.MovieDetailObject;
 import com.chahat.odeum.object.MovieObject;
 import com.chahat.odeum.object.MovieResponse;
 import com.chahat.odeum.object.MovieVideoObject;
-import com.squareup.picasso.Picasso;
+import com.chahat.odeum.object.VideoResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
     @BindView(R.id.textViewAll) TextView textViewAll;
     @BindView(R.id.noResult) LinearLayout noResultLayout;
     @BindView(R.id.noResultSimilar) LinearLayout noResultSimilar;
-    private MovieVideoAdapter movieVideoAdapter;
+    private VideoAdapter movieVideoAdapter;
     private SimilarMovieAdapter similarMovieAdapter;
     public static final String ACTIVITY_NAME = "activityname";
     private static final String SAVE_ID = "id";
@@ -100,7 +99,7 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewTrailer.setLayoutManager(layoutManager);
         recyclerViewTrailer.setNestedScrollingEnabled(false);
-        movieVideoAdapter = new MovieVideoAdapter(getContext());
+        movieVideoAdapter = new VideoAdapter(getContext());
         recyclerViewTrailer.setAdapter(movieVideoAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -249,45 +248,21 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
 
     private void getMovieTrailer(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getMovieTrailer(id,API_KEY);
+        Call<VideoResponse> call = apiInterface.getMovieTrailer(id,API_KEY);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<VideoResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String res = response.body().string();
-                    JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
-
-                    if (jsonArray.length()!=0){
-                        showResult();
-                        List<MovieVideoObject> videoList = new ArrayList<MovieVideoObject>();
-
-                        for (int i=0;i<jsonArray.length();i++){
-                            MovieVideoObject movieVideoObject = new MovieVideoObject();
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            movieVideoObject.setId(jsonObject1.getString("id"));
-                            movieVideoObject.setKey(jsonObject1.getString("key"));
-                            movieVideoObject.setName(jsonObject1.getString("name"));
-                            movieVideoObject.setSite(jsonObject1.getString("site"));
-                            movieVideoObject.setType(jsonObject1.getString("type"));
-
-                            videoList.add(movieVideoObject);
-                        }
-
-                        movieVideoAdapter.setVideoList(videoList);
-                    }else {
-                        showError();
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+                if (response.body().getVideoList()!=null && response.body().getVideoList().size()!=0){
+                    showResult();
+                    movieVideoAdapter.setVideoList(response.body().getVideoList());
+                }else {
+                    showError();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<VideoResponse> call, Throwable t) {
 
             }
         });

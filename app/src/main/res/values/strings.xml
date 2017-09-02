@@ -30,4 +30,11 @@
     <string name="birthplace">Birthplace:</string>
     <string name="images">Images</string>
     <string name="people_movies_transition_photo">PeopleMoviesTransitionPhoto</string>
+    <string name="first_air_date">First Air Date:</string>
+    <string name="last_air_date">Last Air Date:</string>
+    <string name="networks">Networks:</string>
+    <string name="created_by">Created By:</string>
+    <string name="show_type">Show Type:</string>
+    <string name="show_status">Show Status:</string>
+    <string name="similar_tv_shows">Similar TV Shows</string>
 </resources>
