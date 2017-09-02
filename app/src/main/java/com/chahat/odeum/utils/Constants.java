@@ -13,4 +13,10 @@ public class Constants {
     public static final String SAVEINSTANCE_PAGES = "pages";
     public static final String SAVEINSTANCE_CURRENT_PAGE = "page";
     public static final String SAVEINSTANCE_ID = "id";
+    public static final String SAVEINSTANCE_DATE = "date";
+    public static final String SAVEINSTANCE_TITLE = "title";
+    public static final String SAVEINSTANCE_POSTER_URL = "poster";
+    public static final String SAVEINSTANCE_BANNER_URL = "banner";
+    public static final String SAVEINSTANCE_GENRE = "genre";
+    public static final String INSTANCE_ID = "instanceId";
 }

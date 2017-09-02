@@ -33,7 +33,7 @@ public class TvShowDetailObject {
     @SerializedName("production_companies") List<ProductionCompanyObject> productionCompanyList;
     @SerializedName("status") String status;
     @SerializedName("type") String type;
-    @SerializedName("vote_average") int voteAverage;
+    @SerializedName("vote_average") double voteAverage;
     @SerializedName("vote_count") int voteCount;
     @SerializedName("seasons") List<TvSeasonObject> tvSeasonList;
 
@@ -221,11 +221,11 @@ public class TvShowDetailObject {
         this.type = type;
     }
 
-    public int getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(int voteAverage) {
+    public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
