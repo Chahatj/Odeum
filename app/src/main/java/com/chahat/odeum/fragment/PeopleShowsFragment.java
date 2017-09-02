@@ -1,5 +1,8 @@
 package com.chahat.odeum.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -13,6 +16,8 @@ import android.widget.ImageView;
 
 import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
+import com.chahat.odeum.activity.MovieDetailActivity;
+import com.chahat.odeum.activity.TvShowDetailActivity;
 import com.chahat.odeum.adapter.MovieAdapter;
 import com.chahat.odeum.adapter.TvShowAdapter;
 import com.chahat.odeum.api.ApiClient;
@@ -30,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_CURRENT_PAGE;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_ID;
 import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST;
@@ -48,6 +54,7 @@ public class PeopleShowsFragment extends Fragment implements SharedItemClickList
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private Parcelable mRecyclerState;
+    public static final String TAG = "PeopleShowsFrament";
 
     public static PeopleShowsFragment newInstance(int id){
         PeopleShowsFragment peopleShowsFragment = new PeopleShowsFragment();
@@ -121,6 +128,15 @@ public class PeopleShowsFragment extends Fragment implements SharedItemClickList
 
     @Override
     public void onItemClick(int id, ImageView imageView, String imageURL) {
-
+        Bundle bundle = new Bundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName(getString(R.string.people_movies_transition_photo));
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName()).toBundle();
+        }
+        Intent intent = new Intent(getContext(), TvShowDetailActivity.class);
+        intent.putExtra("Id",id);
+        intent.putExtra("ImageURL",imageURL);
+        intent.putExtra(INTENT_ACTIVITY,TAG);
+        startActivity(intent,bundle);
     }
 }

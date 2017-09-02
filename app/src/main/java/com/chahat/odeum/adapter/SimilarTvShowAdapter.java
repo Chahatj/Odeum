@@ -63,8 +63,11 @@ public class SimilarTvShowAdapter extends RecyclerView.Adapter<SimilarTvShowAdap
         Picasso.with(context).load(ApiClient.IMAGE_URL + movieObject.getPosterPath()).into(holder.movieImage);
         holder.tv_title.setText(movieObject.getName());
 
-        String[] date = movieObject.getFirstAirDate().split("-");
-        holder.tv_year.setText(String.valueOf(date[0]));
+        if (movieObject.getFirstAirDate()!=null){
+            String[] date = movieObject.getFirstAirDate().split("-");
+            holder.tv_year.setText(String.valueOf(date[0]));
+        }
+
 
     }
 

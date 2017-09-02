@@ -114,14 +114,17 @@ public class PeopleInfoFragment extends Fragment {
                 textViewOverview.setText(detailResponse.getBiography());
                 textViewBirthplace.setText(detailResponse.getBirthPlace());
 
-                try {
-                    Date d = new SimpleDateFormat("yyyy-MM-dd").parse(detailResponse.getBirthday());
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(d);
-                    textViewBorn.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH )+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (detailResponse.getBirthday()!=null){
+                    try {
+                        Date d = new SimpleDateFormat("yyyy-MM-dd").parse(detailResponse.getBirthday());
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.setTime(d);
+                        textViewBorn.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH )+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
 
             @Override

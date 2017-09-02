@@ -21,6 +21,7 @@ import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.fragment.AiringTodayFragment;
 import com.chahat.odeum.fragment.NowplayingFragment;
 import com.chahat.odeum.fragment.PeopleMoviesFragment;
+import com.chahat.odeum.fragment.PeopleShowsFragment;
 import com.chahat.odeum.object.GenresObject;
 import com.chahat.odeum.object.TvShowDetailObject;
 import com.squareup.picasso.Picasso;
@@ -81,7 +82,10 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
                 if (intent.hasExtra(INTENT_ACTIVITY)){
                     if (intent.getStringExtra(INTENT_ACTIVITY).equals(AiringTodayFragment.TAG)){
                         imageViewPoster.setTransitionName(getString(R.string.transition_photo));
-                    } else {
+                    }else if (intent.getStringExtra(INTENT_ACTIVITY).equals(PeopleShowsFragment.TAG)){
+                        imageViewPoster.setTransitionName(getString(R.string.people_movies_transition_photo));
+                    }
+                    else {
                         imageViewPoster.setTransitionName(getString(R.string.similar_transition_photo));
                     }
                 }
@@ -142,7 +146,13 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
                 }
                 textViewGenre.setText(stringBuilder.deleteCharAt(stringBuilder.length()-2).toString());
 
-                String[] date = response.body().getFirstAirDate().split("-");
+                String[] date = new String[]{};
+                if (response.body().getFirstAirDate()!=null){
+                    date = response.body().getFirstAirDate().split("-");
+                }else {
+                    date[0] = "N/A";
+                }
+
 
                 if (response.body().getEpisodeRunTimeList().size()!=0){
                     int hour = response.body().getEpisodeRunTimeList().get(0)/60;

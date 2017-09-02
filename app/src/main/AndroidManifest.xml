@@ -34,8 +34,11 @@
         <activity
             android:name=".activity.PeopleDetailActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity android:name=".activity.TvShowDetailActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"></activity>
+        <activity
+            android:name=".activity.TvShowDetailActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity android:name=".activity.SimilarTvShowActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

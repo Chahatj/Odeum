@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.ForwardingListener;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.activity.MovieDetailActivity;
+import com.chahat.odeum.activity.SimilarTvShowActivity;
 import com.chahat.odeum.activity.TvShowDetailActivity;
 import com.chahat.odeum.adapter.SimilarTvShowAdapter;
 import com.chahat.odeum.adapter.TvShowAdapter;
@@ -34,6 +36,7 @@ import com.chahat.odeum.object.VideoResponse;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -48,12 +51,25 @@ import retrofit2.Response;
 import static com.chahat.odeum.BuildConfig.API_KEY;
 import static com.chahat.odeum.utils.Constants.INSTANCE_ID;
 import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_CREATEDBY;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_FIRST_AIR_DATE;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_ID;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LAST_AIR_DATE;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST_SIMILAR;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST_TRAILER;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_NETWORKS;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_OVERVIEW;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_RATING;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_RECYCLERSTATE_SIMILAR;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_RECYCLERSTATE_TRAILER;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_SHOWSTATUS;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_SHOWTYPE;
 
 /**
  * Created by chahat on 2/9/17.
  */
 
-public class TvShowInfoFragment extends Fragment implements SharedItemClickListner {
+public class TvShowInfoFragment extends Fragment implements SharedItemClickListner,View.OnClickListener {
 
     private int id;
     @BindView(R.id.tv_rating) TextView textViewRating;
@@ -72,6 +88,7 @@ public class TvShowInfoFragment extends Fragment implements SharedItemClickListn
     private VideoAdapter videoAdapter;
     private SimilarTvShowAdapter tvShowAdapter;
     public static final String TAG = "TvShowInfoFragment";
+    private Parcelable mRecyclerStateTvShows,mRecyclerStateTrailor;
 
     public static TvShowInfoFragment newInstance(int id){
         Bundle bundle = new Bundle();
@@ -86,7 +103,7 @@ public class TvShowInfoFragment extends Fragment implements SharedItemClickListn
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tv_show_info,container,false);
         ButterKnife.bind(this,view);
-        getTvShowInfo(id);
+        textViewAll.setOnClickListener(this);
 
         recyclerViewTrailer.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerViewTrailer.setNestedScrollingEnabled(false);
@@ -98,8 +115,27 @@ public class TvShowInfoFragment extends Fragment implements SharedItemClickListn
         tvShowAdapter = new SimilarTvShowAdapter(getContext(),this);
         recyclerViewSimilarShow.setAdapter(tvShowAdapter);
 
-        getTvShowVideo(id);
-        getSimilarTvShow(id);
+        if (savedInstanceState==null){
+            getTvShowInfo(id);
+            getTvShowVideo(id);
+            getSimilarTvShow(id);
+        }else {
+            videoAdapter.setVideoList((ArrayList)savedInstanceState.getParcelableArrayList(SAVEINSTANCE_LIST_TRAILER));
+            tvShowAdapter.setTvShowList((ArrayList)savedInstanceState.getParcelableArrayList(SAVEINSTANCE_LIST_SIMILAR));
+            mRecyclerStateTvShows = savedInstanceState.getParcelable(SAVEINSTANCE_RECYCLERSTATE_SIMILAR);
+            mRecyclerStateTrailor = savedInstanceState.getParcelable(SAVEINSTANCE_RECYCLERSTATE_TRAILER);
+            recyclerViewTrailer.getLayoutManager().onRestoreInstanceState(mRecyclerStateTrailor);
+            recyclerViewSimilarShow.getLayoutManager().onRestoreInstanceState(mRecyclerStateTvShows);
+            textViewRating.setText(savedInstanceState.getString(SAVEINSTANCE_RATING));
+            textViewOverview.setText(savedInstanceState.getString(SAVEINSTANCE_OVERVIEW));
+            textViewShowType.setText(savedInstanceState.getString(SAVEINSTANCE_SHOWTYPE));
+            textViewStatus.setText(savedInstanceState.getString(SAVEINSTANCE_SHOWSTATUS));
+            textViewNetworks.setText(savedInstanceState.getString(SAVEINSTANCE_NETWORKS));
+            textViewCreatedBy.setText(savedInstanceState.getString(SAVEINSTANCE_CREATEDBY));
+            textViewFirstAirDate.setText(savedInstanceState.getString(SAVEINSTANCE_FIRST_AIR_DATE));
+            textViewLastAirDate.setText(savedInstanceState.getString(SAVEINSTANCE_LAST_AIR_DATE));
+        }
+
         return view;
     }
 
@@ -108,7 +144,29 @@ public class TvShowInfoFragment extends Fragment implements SharedItemClickListn
         super.onCreate(savedInstanceState);
         if (savedInstanceState==null){
             id = getArguments().getInt(INSTANCE_ID);
+        }else {
+            id = savedInstanceState.getInt(SAVEINSTANCE_ID);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mRecyclerStateTvShows = recyclerViewSimilarShow.getLayoutManager().onSaveInstanceState();
+        mRecyclerStateTrailor = recyclerViewTrailer.getLayoutManager().onSaveInstanceState();
+        outState.putInt(SAVEINSTANCE_ID,id);
+        outState.putString(SAVEINSTANCE_RATING,textViewRating.getText().toString());
+        outState.putString(SAVEINSTANCE_OVERVIEW,textViewOverview.getText().toString());
+        outState.putString(SAVEINSTANCE_FIRST_AIR_DATE,textViewFirstAirDate.getText().toString());
+        outState.putString(SAVEINSTANCE_LAST_AIR_DATE,textViewLastAirDate.getText().toString());
+        outState.putString(SAVEINSTANCE_SHOWTYPE,textViewShowType.getText().toString());
+        outState.putString(SAVEINSTANCE_SHOWSTATUS,textViewStatus.getText().toString());
+        outState.putString(SAVEINSTANCE_NETWORKS,textViewNetworks.getText().toString());
+        outState.putString(SAVEINSTANCE_CREATEDBY,textViewCreatedBy.getText().toString());
+        outState.putParcelableArrayList(SAVEINSTANCE_LIST_TRAILER, (ArrayList<? extends Parcelable>) videoAdapter.getVideoList());
+        outState.putParcelableArrayList(SAVEINSTANCE_LIST_SIMILAR, (ArrayList<? extends Parcelable>) tvShowAdapter.getTvShowList());
+        outState.putParcelable(SAVEINSTANCE_RECYCLERSTATE_TRAILER,mRecyclerStateTrailor);
+        outState.putParcelable(SAVEINSTANCE_RECYCLERSTATE_SIMILAR,mRecyclerStateTvShows);
     }
 
     private void getTvShowInfo(int id){
@@ -242,5 +300,12 @@ public class TvShowInfoFragment extends Fragment implements SharedItemClickListn
         intent.putExtra("ImageURL",imageURL);
         intent.putExtra(INTENT_ACTIVITY,TAG);
         startActivity(intent,bundle);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getContext(), SimilarTvShowActivity.class);
+        intent.putExtra("Id",id);
+        startActivity(intent);
     }
 }
