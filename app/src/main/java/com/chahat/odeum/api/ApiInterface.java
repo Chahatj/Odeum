@@ -8,6 +8,7 @@ import com.chahat.odeum.object.PeopleMovieResponse;
 import com.chahat.odeum.object.PeopleResponse;
 import com.chahat.odeum.object.PeopleTvShowResponse;
 import com.chahat.odeum.object.ProfileImageResponse;
+import com.chahat.odeum.object.SeasonObject;
 import com.chahat.odeum.object.TvShowDetailObject;
 import com.chahat.odeum.object.TvShowResponse;
 import com.chahat.odeum.object.VideoResponse;
@@ -70,4 +71,6 @@ public interface ApiInterface {
     Call<TvShowResponse> getSimilarTvShow(@Path("tv_id") int id,@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("tv/{tv_id}/credits")
     Call<CastResponse> getCastList(@Path("tv_id") int id,@Query("api_key") String API_KEY);
+    @GET("tv/{tv_id}/season/{season_number}")
+    Call<SeasonObject> getSeasonList(@Path("tv_id") int id,@Path("season_number") int seasonNumber,@Query("api_key") String API_KEY);
 }
