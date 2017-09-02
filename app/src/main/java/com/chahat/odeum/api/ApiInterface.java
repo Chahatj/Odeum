@@ -1,6 +1,7 @@
 package com.chahat.odeum.api;
 
 import com.chahat.odeum.fragment.PeopleMoviesFragment;
+import com.chahat.odeum.object.CastResponse;
 import com.chahat.odeum.object.MovieResponse;
 import com.chahat.odeum.object.PeopleDetailResponse;
 import com.chahat.odeum.object.PeopleMovieResponse;
@@ -38,7 +39,7 @@ public interface ApiInterface {
     @GET("movie/{id}/videos")
     Call<VideoResponse> getMovieTrailer(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/credits")
-    Call<ResponseBody> getMovieCast(@Path("id") int id,@Query("api_key") String API_KEY);
+    Call<CastResponse> getMovieCast(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/reviews")
     Call<ResponseBody> getMovieReview(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/similar")
@@ -67,4 +68,6 @@ public interface ApiInterface {
     Call<VideoResponse> getVideos(@Path("tv_id") int id,@Query("api_key") String  API_KEY);
     @GET("tv/{tv_id}/similar")
     Call<TvShowResponse> getSimilarTvShow(@Path("tv_id") int id,@Query("api_key") String API_KEY,@Query("page") int page);
+    @GET("tv/{tv_id}/credits")
+    Call<CastResponse> getCastList(@Path("tv_id") int id,@Query("api_key") String API_KEY);
 }

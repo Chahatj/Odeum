@@ -1,50 +1,52 @@
 package com.chahat.odeum.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
-import com.chahat.odeum.adapter.MovieCastAdapter;
+import com.chahat.odeum.activity.PeopleDetailActivity;
+import com.chahat.odeum.adapter.CastAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
-import com.chahat.odeum.object.MovieCastObject;
+import com.chahat.odeum.object.CastObject;
+import com.chahat.odeum.object.CastResponse;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 
 /**
  * Created by chahat on 25/8/17.
  */
 
-public class CastFragment extends Fragment {
+public class CastFragment extends Fragment implements SharedItemClickListner {
 
     private static final String TAG = "CastFragment";
     private int id;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.noResult) LinearLayout noResultLayout;
-    private MovieCastAdapter movieCastAdapter;
+    private CastAdapter movieCastAdapter;
     private static final String SAVE_ID = "id";
     private static final String SAVE_LIST = "list";
     private static final String SAVE_RECYCLER_STATE = "recyclerstate";
@@ -59,13 +61,13 @@ public class CastFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(false);
-        movieCastAdapter = new MovieCastAdapter(getContext());
+        movieCastAdapter = new CastAdapter(getContext(),this);
         recyclerView.setAdapter(movieCastAdapter);
 
         if (savedInstanceState==null){
             getMovieCast(id);
         }else {
-            movieCastAdapter.setMovieCastList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_LIST));
+            movieCastAdapter.setCastList((ArrayList)savedInstanceState.getParcelableArrayList(SAVE_LIST));
             mRecyclerState = savedInstanceState.getParcelable(SAVE_RECYCLER_STATE);
             recyclerView.getLayoutManager().onRestoreInstanceState(mRecyclerState);
         }
@@ -98,51 +100,29 @@ public class CastFragment extends Fragment {
         super.onSaveInstanceState(outState);
         mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
         outState.putInt(SAVE_ID,id);
-        outState.putParcelableArrayList(SAVE_LIST, (ArrayList<? extends Parcelable>) movieCastAdapter.getMovieCastList());
+        outState.putParcelableArrayList(SAVE_LIST, (ArrayList<? extends Parcelable>) movieCastAdapter.getCastList());
         outState.putParcelable(SAVE_RECYCLER_STATE,mRecyclerState);
     }
 
     private void getMovieCast(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getMovieCast(id,API_KEY);
+        Call<CastResponse> call = apiInterface.getMovieCast(id,API_KEY);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<CastResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
 
-                try {
-                    String res = response.body().string();
-                    JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("cast");
-
-                    if (jsonArray.length()!=0){
-                        showResult();
-                        List<MovieCastObject> castList = new ArrayList<MovieCastObject>();
-
-                        for (int i=0;i<jsonArray.length();i++){
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            MovieCastObject movieCastObject = new MovieCastObject();
-                            movieCastObject.setId(jsonObject1.getInt("id"));
-                            movieCastObject.setCastId(jsonObject1.getInt("cast_id"));
-                            movieCastObject.setName(jsonObject1.getString("name"));
-                            movieCastObject.setCharacter(jsonObject1.getString("character"));
-                            movieCastObject.setCreditId(jsonObject1.getString("credit_id"));
-                            movieCastObject.setProfile(jsonObject1.getString("profile_path"));
-
-                            castList.add(movieCastObject);
-                        }
-                        movieCastAdapter.setMovieCastList(castList);
-                    }else {
-                        showError();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                List<CastObject> castList = response.body().getCastList();
+                if (castList!=null && castList.size()!=0) {
+                    showResult();
+                    movieCastAdapter.setCastList(castList);
+                }else {
+                    showError();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<CastResponse> call, Throwable t) {
                 showError();
             }
         });
@@ -156,5 +136,19 @@ public class CastFragment extends Fragment {
     private void showResult(){
         recyclerView.setVisibility(View.VISIBLE);
         noResultLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(int id, ImageView imageView, String imageURL) {
+        Bundle bundle = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName(getString(R.string.people_movies_transition_photo));
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName()).toBundle();
+        }
+        Intent intent  = new Intent(getContext(), PeopleDetailActivity.class);
+        intent.putExtra(PopularPeopleFragment.INTENT_ID,id);
+        intent.putExtra(PopularPeopleFragment.INTENT_IMAGE,imageURL);
+        intent.putExtra(INTENT_ACTIVITY,TAG);
+        startActivity(intent,bundle);
     }
 }

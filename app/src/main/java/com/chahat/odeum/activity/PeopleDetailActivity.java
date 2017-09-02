@@ -28,6 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 
 public class PeopleDetailActivity extends AppCompatActivity implements View.OnClickListener, AppBarLayout.OnOffsetChangedListener {
 
@@ -55,16 +56,24 @@ public class PeopleDetailActivity extends AppCompatActivity implements View.OnCl
         ButterKnife.bind(this);
         appBarLayout.addOnOffsetChangedListener(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            imageViewProfile.setTransitionName(getString(R.string.transition_photo));
-        }
         imageViewBack.setOnClickListener(this);
 
         if (savedInstanceState==null){
             Intent intent = getIntent();
-            if (intent!=null && intent.hasExtra(PopularPeopleFragment.INTENT_ID) && intent.hasExtra(PopularPeopleFragment.INTENT_IMAGE)){
+            if (intent!=null && intent.hasExtra(INTENT_ACTIVITY) && intent.hasExtra(PopularPeopleFragment.INTENT_ID) && intent.hasExtra(PopularPeopleFragment.INTENT_IMAGE)){
                 id = intent.getIntExtra(PopularPeopleFragment.INTENT_ID,0);
                 imageURL = intent.getStringExtra(PopularPeopleFragment.INTENT_IMAGE);
+
+                if (intent.getStringExtra(INTENT_ACTIVITY).equals(PopularPeopleFragment.TAG)){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        imageViewProfile.setTransitionName(getString(R.string.transition_photo));
+                    }
+                }else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        imageViewProfile.setTransitionName(getString(R.string.people_movies_transition_photo));
+                    }
+                }
+
                 getPeopleDetail(id);
             }
         }else {

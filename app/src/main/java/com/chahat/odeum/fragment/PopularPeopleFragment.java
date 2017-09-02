@@ -35,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
+import static com.chahat.odeum.utils.Constants.INTENT_ACTIVITY;
 
 /**
  * Created by chahat on 31/8/17.
@@ -52,6 +53,7 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
     private static final String SAVEINSTANCE_LIST = "movielist";
     private static final String SAVEINSTANCE_PAGES = "pages";
     private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
+    public static final String TAG = "PopularPeopleFragment";
 
     public static PopularPeopleFragment newInstance(){
         return new PopularPeopleFragment();
@@ -132,6 +134,7 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
         Intent intent = new Intent(getContext(),PeopleDetailActivity.class);
         intent.putExtra(INTENT_ID,id);
         intent.putExtra(INTENT_IMAGE,imageURL);
+        intent.putExtra(INTENT_ACTIVITY,TAG);
         startActivity(intent,bundle);
     }
 }

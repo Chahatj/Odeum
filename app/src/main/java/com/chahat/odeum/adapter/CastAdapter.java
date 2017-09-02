@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chahat.odeum.Interface.SharedItemClickListner;
 import com.chahat.odeum.R;
 import com.chahat.odeum.api.ApiClient;
+import com.chahat.odeum.object.CastObject;
 import com.chahat.odeum.object.MovieCastObject;
 import com.squareup.picasso.Picasso;
 
@@ -24,18 +25,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by chahat on 29/8/17.
  */
 
-public class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.CastViewHolder> {
+public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder>  {
 
-    List<MovieCastObject> movieCastList;
+    List<CastObject> castList;
     Context context;
+    SharedItemClickListner sharedItemClickListner;
 
-    public MovieCastAdapter(Context context){
+    public CastAdapter(Context context,SharedItemClickListner itemClickListner){
         this.context = context;
-        movieCastList = new ArrayList<>();
+        castList = new ArrayList<>();
+        this.sharedItemClickListner = itemClickListner;
     }
 
-    public void setMovieCastList(List<MovieCastObject> movieCastList) {
-        this.movieCastList = movieCastList;
+    public void setCastList(List<CastObject> castList) {
+        this.castList = castList;
         notifyDataSetChanged();
     }
 
@@ -49,23 +52,23 @@ public class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.Cast
     @Override
     public void onBindViewHolder(CastViewHolder holder, int position) {
 
-        MovieCastObject movieCastObject = movieCastList.get(position);
-        Picasso.with(context).load(ApiClient.IMAGE_URL+movieCastObject.getProfile()).into(holder.imageViewProfile);
-        holder.textViewName.setText(movieCastObject.getName());
-        holder.textViewAs.setText(movieCastObject.getCharacter());
+        CastObject castObject = castList.get(position);
+        Picasso.with(context).load(ApiClient.IMAGE_URL+castObject.getProfilePath()).into(holder.imageViewProfile);
+        holder.textViewName.setText(castObject.getName());
+        holder.textViewAs.setText(castObject.getCharacter());
     }
 
-    public List<MovieCastObject> getMovieCastList() {
-        return movieCastList;
+    public List<CastObject> getCastList() {
+        return castList;
     }
 
     @Override
     public int getItemCount() {
-        if (movieCastList!=null) return movieCastList.size();
+        if (castList!=null) return castList.size();
         else return 0;
     }
 
-    public class CastViewHolder extends RecyclerView.ViewHolder {
+    public class CastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.imageViewProfile) CircleImageView imageViewProfile;
         @BindView(R.id.textViewName) TextView textViewName;
@@ -74,6 +77,13 @@ public class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.Cast
         public CastViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            CastObject castObject = castList.get(getAdapterPosition());
+            sharedItemClickListner.onItemClick(castObject.getId(),imageViewProfile,castObject.getProfilePath());
         }
     }
 }
