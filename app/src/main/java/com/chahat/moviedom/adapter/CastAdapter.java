@@ -26,9 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder>  {
 
-    List<CastObject> castList;
-    Context context;
-    SharedItemClickListner sharedItemClickListner;
+    private List<CastObject> castList;
+    private Context context;
+    private SharedItemClickListner sharedItemClickListner;
 
     public CastAdapter(Context context,SharedItemClickListner itemClickListner){
         this.context = context;

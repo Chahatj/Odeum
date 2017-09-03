@@ -49,8 +49,8 @@ public class PopularFrament extends Fragment implements SwipeRefreshLayout.OnRef
     private static final String SAVEINSTANCE_PAGES = "pages";
     private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
     private RecyclerView recyclerView;
-    public static final String ACTIVITY_NAME = "activityname";
-    public static final String TAG = "TransitionPhoto";
+    private static final String ACTIVITY_NAME = "activityname";
+    private static final String TAG = "TransitionPhoto";
 
     @Nullable
     @Override

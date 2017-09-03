@@ -10,8 +10,10 @@ import java.util.List;
 
 public class ProfileImageResponse {
 
-    @SerializedName("id") int id;
-    @SerializedName("profiles") List<ImagesObject> imageList;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("profiles")
+    private List<ImagesObject> imageList;
 
     public int getId() {
         return id;

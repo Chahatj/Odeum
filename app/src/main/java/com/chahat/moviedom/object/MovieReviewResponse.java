@@ -10,11 +10,16 @@ import java.util.List;
 
 public class MovieReviewResponse {
 
-    @SerializedName("id") int id;
-    @SerializedName("page") int page;
-    @SerializedName("results") List<MovieReviewObject> reviewList;
-    @SerializedName("total_pages") int totalPages;
-    @SerializedName("total_results") int totalResults;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("page")
+    private int page;
+    @SerializedName("results")
+    private List<MovieReviewObject> reviewList;
+    @SerializedName("total_pages")
+    private int totalPages;
+    @SerializedName("total_results")
+    private int totalResults;
 
     public int getId() {
         return id;

@@ -10,14 +10,22 @@ import java.util.List;
 
 public class SeasonObject {
 
-    @SerializedName("air_date") String airDate;
-    @SerializedName("episode_count") int episodeCount;
-    @SerializedName("id") int id;
-    @SerializedName("poster_path") String posterPath;
-    @SerializedName("season_number") int seasonNumber;
-    @SerializedName("name") String name;
-    @SerializedName("overview") String overview;
-    @SerializedName("episodes") List<EpisodeObject> episodeList;
+    @SerializedName("air_date")
+    private String airDate;
+    @SerializedName("episode_count")
+    private int episodeCount;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("poster_path")
+    private String posterPath;
+    @SerializedName("season_number")
+    private int seasonNumber;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("episodes")
+    private List<EpisodeObject> episodeList;
 
     public String getAirDate() {
         return airDate;

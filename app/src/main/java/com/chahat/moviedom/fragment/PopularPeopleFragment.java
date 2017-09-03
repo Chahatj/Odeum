@@ -47,7 +47,7 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    PopularPeopleAdapter popularPeopleAdapter;
+    private PopularPeopleAdapter popularPeopleAdapter;
     public static final String INTENT_ID = "id";
     public static final String INTENT_IMAGE = "image";
     private Parcelable mRecyclerState;

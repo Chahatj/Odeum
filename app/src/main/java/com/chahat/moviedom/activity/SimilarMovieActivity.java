@@ -44,8 +44,8 @@ public class SimilarMovieActivity extends AppCompatActivity implements LoadPages
     @BindView(R.id.adView)
     AdView adView;
     private MovieAdapter movieAdapter;
-    public static final String ACTIVITY_NAME = "activityname";
-    public static final String TAG = "TransitionPhoto";
+    private static final String ACTIVITY_NAME = "activityname";
+    private static final String TAG = "TransitionPhoto";
     private int id;
     private static final String SAVE_ID = "id";
     private static final String SAVE_RECYCLER_STATE = "recyclerState";
@@ -67,8 +67,11 @@ public class SimilarMovieActivity extends AppCompatActivity implements LoadPages
         toolbar.setTitle(getResources().getString(R.string.similar_movies));
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

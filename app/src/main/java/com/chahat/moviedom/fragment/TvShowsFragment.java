@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.chahat.moviedom.R;
 import com.chahat.moviedom.adapter.TvShowsPagerAdapter;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import butterknife.BindView;
@@ -25,11 +24,11 @@ import butterknife.ButterKnife;
 
 public class TvShowsFragment extends Fragment {
 
-    @BindView(R.id.sliding_layout) TabLayout tabLayout;
-    @BindView(R.id.view_pager) ViewPager viewPager;
-    private TvShowsPagerAdapter pagerAdapter;
+    @BindView(R.id.sliding_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
     private final CharSequence[] titles = {"AIRING TODAY","ON THE AIR","POPULAR","TOP RATED"};
-    private final int numOfTabs = 4;
     @BindView(R.id.adView)
     AdView mAdView;
 
@@ -47,7 +46,8 @@ public class TvShowsFragment extends Fragment {
                 .build();
         mAdView.loadAd(adRequest);
 
-        pagerAdapter = new TvShowsPagerAdapter(getChildFragmentManager(),titles,numOfTabs);
+        int numOfTabs = 4;
+        TvShowsPagerAdapter pagerAdapter = new TvShowsPagerAdapter(getChildFragmentManager(), titles, numOfTabs);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 

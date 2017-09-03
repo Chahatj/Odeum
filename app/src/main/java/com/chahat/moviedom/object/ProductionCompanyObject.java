@@ -8,8 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ProductionCompanyObject {
 
-    @SerializedName("id") int id;
-    @SerializedName("name") String name;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("name")
+    private String name;
 
     public int getId() {
         return id;

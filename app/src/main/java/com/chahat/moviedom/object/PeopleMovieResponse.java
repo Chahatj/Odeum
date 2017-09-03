@@ -10,8 +10,10 @@ import java.util.List;
 
 public class PeopleMovieResponse {
 
-    @SerializedName("id") int id;
-    @SerializedName("cast") List<MovieObject> peopleMoviesList;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("cast")
+    private List<MovieObject> peopleMoviesList;
 
     public int getId() {
         return id;

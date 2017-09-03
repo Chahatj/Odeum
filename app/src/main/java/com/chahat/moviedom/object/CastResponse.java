@@ -10,8 +10,10 @@ import java.util.List;
 
 public class CastResponse {
 
-    @SerializedName("id") int id;
-    @SerializedName("cast") List<CastObject> castList;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("cast")
+    private List<CastObject> castList;
 
     public int getId() {
         return id;

@@ -11,15 +11,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class CastObject  implements Parcelable{
 
-    @SerializedName("id") int id;
-    @SerializedName("character") String character;
-    @SerializedName("credit_id") String creditId;
-    @SerializedName("gender") int gender;
-    @SerializedName("name") String  name;
-    @SerializedName("order") int order;
-    @SerializedName("profile_path") String profilePath;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("character")
+    private String character;
+    @SerializedName("credit_id")
+    private String creditId;
+    @SerializedName("gender")
+    private int gender;
+    @SerializedName("name")
+    private String  name;
+    @SerializedName("order")
+    private int order;
+    @SerializedName("profile_path")
+    private String profilePath;
 
-    protected CastObject(Parcel in) {
+    private CastObject(Parcel in) {
         id = in.readInt();
         character = in.readString();
         creditId = in.readString();

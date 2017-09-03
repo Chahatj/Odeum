@@ -43,8 +43,10 @@ import static com.chahat.moviedom.utils.Constants.SAVEINSTANCE_RECYCLERSTATE;
 public class TvShowSeasonFragment extends Fragment {
 
     private int id;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    @BindView(R.id.noResult) LinearLayout noResultLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.noResult)
+    LinearLayout noResultLayout;
     private TvShowSeasonAdapter showSeasonAdapter;
     private Parcelable mRecyclerState;
 

@@ -43,7 +43,8 @@
             android:name=".activity.SimilarTvShowActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.FullImageActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"></activity>
+            android:theme="@style/AppTheme.ActionBar.Transparent">
+        </activity>
     </application>
 
 </manifest>

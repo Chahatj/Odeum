@@ -15,7 +15,7 @@ public class MovieVideoObject implements Parcelable {
 
     }
 
-    protected MovieVideoObject(Parcel in) {
+    private MovieVideoObject(Parcel in) {
         id = in.readString();
         key = in.readString();
         name = in.readString();

@@ -13,21 +13,34 @@ import java.util.ArrayList;
 
 public class TvShowObject implements Parcelable {
 
-    @SerializedName("poster_path") String posterPath;
-    @SerializedName("popularity") double popularity;
-    @SerializedName("id") int id;
-    @SerializedName("backdrop_path") String backdropPath;
-    @SerializedName("vote_average") double voteAverage;
-    @SerializedName("overview") String overview;
-    @SerializedName("first_air_date") String firstAirDate;
-    @SerializedName("origin_country") ArrayList<String> originCountry;
-    @SerializedName("genre_ids") ArrayList<Integer> genreIds;
-    @SerializedName("original_language") String originLanguage;
-    @SerializedName("vote_count") int voteCount;
-    @SerializedName("name") String name;
-    @SerializedName("original_name") String originalName;
+    @SerializedName("poster_path")
+    private String posterPath;
+    @SerializedName("popularity")
+    private double popularity;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+    @SerializedName("vote_average")
+    private double voteAverage;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("first_air_date")
+    private String firstAirDate;
+    @SerializedName("origin_country")
+    private ArrayList<String> originCountry;
+    @SerializedName("genre_ids")
+    private ArrayList<Integer> genreIds;
+    @SerializedName("original_language")
+    private String originLanguage;
+    @SerializedName("vote_count")
+    private int voteCount;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("original_name")
+    private String originalName;
 
-    protected TvShowObject(Parcel in) {
+    private TvShowObject(Parcel in) {
         posterPath = in.readString();
         popularity = in.readDouble();
         id = in.readInt();

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.chahat.moviedom.R;
 import com.chahat.moviedom.adapter.ViewPagerAdapter;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import butterknife.BindView;
@@ -25,12 +24,13 @@ import butterknife.ButterKnife;
 
 public class MoviesFragment extends Fragment {
 
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    TabLayout tabs;
-    CharSequence Titles[]={"NOW PLAYING","UPCOMING","POPULAR","TOP RATED"};
-    int Numboftabs = 4;
-    @BindView(R.id.adView) AdView adView;
+    private ViewPager pager;
+    private ViewPagerAdapter adapter;
+    private TabLayout tabs;
+    private CharSequence[] Titles={"NOW PLAYING","UPCOMING","POPULAR","TOP RATED"};
+    private int Numboftabs = 4;
+    @BindView(R.id.adView)
+    AdView adView;
 
     public static MoviesFragment newInstance(){
         return new MoviesFragment();

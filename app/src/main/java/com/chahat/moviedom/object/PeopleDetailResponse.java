@@ -8,18 +8,30 @@ import com.google.gson.annotations.SerializedName;
 
 public class PeopleDetailResponse {
 
-    @SerializedName("adult") boolean adult;
-    @SerializedName("biography") String biography;
-    @SerializedName("birthday") String birthday;
-    @SerializedName("deathday") String deathday;
-    @SerializedName("gender") int gender;
-    @SerializedName("homepage") String homepage;
-    @SerializedName("id") int id;
-    @SerializedName("imdb_id") String imdbId;
-    @SerializedName("name") String name;
-    @SerializedName("place_of_birth") String birthPlace;
-    @SerializedName("popularity") double popularity;
-    @SerializedName("profile_path") String profilePath;
+    @SerializedName("adult")
+    private boolean adult;
+    @SerializedName("biography")
+    private String biography;
+    @SerializedName("birthday")
+    private String birthday;
+    @SerializedName("deathday")
+    private String deathday;
+    @SerializedName("gender")
+    private int gender;
+    @SerializedName("homepage")
+    private String homepage;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("imdb_id")
+    private String imdbId;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("place_of_birth")
+    private String birthPlace;
+    @SerializedName("popularity")
+    private double popularity;
+    @SerializedName("profile_path")
+    private String profilePath;
 
     public boolean isAdult() {
         return adult;

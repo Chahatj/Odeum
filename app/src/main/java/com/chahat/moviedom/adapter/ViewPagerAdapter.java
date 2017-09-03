@@ -34,19 +34,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            NowplayingFragment tab1 = new NowplayingFragment();
-            return tab1;
+            return new NowplayingFragment();
         }
         else if (position == 1)       // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            UpcomingFragment tab2 = new UpcomingFragment();
-            return tab2;
+            return new UpcomingFragment();
         }else if (position == 2){
-            PopularFrament tab3 = new PopularFrament();
-            return tab3;
+            return new PopularFrament();
         }else {
-            TopratedFragment tab4 = new TopratedFragment();
-            return tab4;
+            return new TopratedFragment();
         }
 
 

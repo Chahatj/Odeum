@@ -8,11 +8,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class TvSeasonObject {
 
-    @SerializedName("air_date") String airDate;
-    @SerializedName("episode_count") int episodeCount;
-    @SerializedName("id") int id;
-    @SerializedName("poster_path") String posterPath;
-    @SerializedName("season_number") int seasonNumber;
+    @SerializedName("air_date")
+    private String airDate;
+    @SerializedName("episode_count")
+    private int episodeCount;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("poster_path")
+    private String posterPath;
+    @SerializedName("season_number")
+    private int seasonNumber;
 
     public String getAirDate() {
         return airDate;

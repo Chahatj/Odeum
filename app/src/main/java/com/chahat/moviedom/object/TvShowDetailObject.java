@@ -10,32 +10,58 @@ import java.util.List;
 
 public class TvShowDetailObject {
 
-    @SerializedName("backdrop_path") String backdropPath;
-    @SerializedName("created_by") List<TvShowCreatedByObject> createdByList;
-    @SerializedName("episode_run_time") List<Integer> episodeRunTimeList;
-    @SerializedName("first_air_date") String firstAirDate;
-    @SerializedName("genres") List<GenresObject> genresList;
-    @SerializedName("homepage") String homepage;
-    @SerializedName("id") int id;
-    @SerializedName("in_production") boolean inProduction;
-    @SerializedName("languages") List<String> languagesList;
-    @SerializedName("last_air_date") String lastAirDate;
-    @SerializedName("name") String name;
-    @SerializedName("networks") List<TvShowNetworksObject> networkList;
-    @SerializedName("number_of_episodes") int numberOfEpisodes;
-    @SerializedName("number_of_seasons") int numberOfSeasons;
-    @SerializedName("origin_country") List<String> countryList;
-    @SerializedName("original_language") String language;
-    @SerializedName("original_name") String originalName;
-    @SerializedName("overview") String overview;
-    @SerializedName("popularity") double popularity;
-    @SerializedName("poster_path") String posterPath;
-    @SerializedName("production_companies") List<ProductionCompanyObject> productionCompanyList;
-    @SerializedName("status") String status;
-    @SerializedName("type") String type;
-    @SerializedName("vote_average") double voteAverage;
-    @SerializedName("vote_count") int voteCount;
-    @SerializedName("seasons") List<TvSeasonObject> tvSeasonList;
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+    @SerializedName("created_by")
+    private List<TvShowCreatedByObject> createdByList;
+    @SerializedName("episode_run_time")
+    private List<Integer> episodeRunTimeList;
+    @SerializedName("first_air_date")
+    private String firstAirDate;
+    @SerializedName("genres")
+    private List<GenresObject> genresList;
+    @SerializedName("homepage")
+    private String homepage;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("in_production")
+    private boolean inProduction;
+    @SerializedName("languages")
+    private List<String> languagesList;
+    @SerializedName("last_air_date")
+    private String lastAirDate;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("networks")
+    private List<TvShowNetworksObject> networkList;
+    @SerializedName("number_of_episodes")
+    private int numberOfEpisodes;
+    @SerializedName("number_of_seasons")
+    private int numberOfSeasons;
+    @SerializedName("origin_country")
+    private List<String> countryList;
+    @SerializedName("original_language")
+    private String language;
+    @SerializedName("original_name")
+    private String originalName;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("popularity")
+    private double popularity;
+    @SerializedName("poster_path")
+    private String posterPath;
+    @SerializedName("production_companies")
+    private List<ProductionCompanyObject> productionCompanyList;
+    @SerializedName("status")
+    private String status;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("vote_average")
+    private double voteAverage;
+    @SerializedName("vote_count")
+    private int voteCount;
+    @SerializedName("seasons")
+    private List<TvSeasonObject> tvSeasonList;
 
     public String getBackdropPath() {
         return backdropPath;

@@ -31,7 +31,7 @@ public class PeopleObject implements Parcelable {
     @SerializedName("known_for")
     private List<MovieObject> knownFor;
 
-    protected PeopleObject(Parcel in) {
+    private PeopleObject(Parcel in) {
         profilePath = in.readString();
         adult = in.readByte() != 0;
         id = in.readInt();

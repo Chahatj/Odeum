@@ -8,10 +8,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class TvShowCreatedByObject {
 
-    @SerializedName("id") int id;
-    @SerializedName("name") String name;
-    @SerializedName("gender") int gender;
-    @SerializedName("profile_path") String profilePath;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("gender")
+    private int gender;
+    @SerializedName("profile_path")
+    private String profilePath;
 
     public int getId() {
         return id;

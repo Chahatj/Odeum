@@ -27,8 +27,8 @@ import butterknife.ButterKnife;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MovieVideoViewHolder> {
 
-    List<VideoObject> videoList;
-    Context context;
+    private List<VideoObject> videoList;
+    private Context context;
 
     public VideoAdapter(Context context){
         this.context = context;

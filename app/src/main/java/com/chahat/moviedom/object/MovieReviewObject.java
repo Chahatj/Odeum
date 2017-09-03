@@ -11,13 +11,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class MovieReviewObject implements Parcelable {
 
-    @SerializedName("id") String id;
-    @SerializedName("author") String author;
-    @SerializedName("content") String content;
-    @SerializedName("url") String url;
+    @SerializedName("id")
+    private String id;
+    @SerializedName("author")
+    private String author;
+    @SerializedName("content")
+    private String content;
+    @SerializedName("url")
+    private String url;
 
 
-    protected MovieReviewObject(Parcel in) {
+    private MovieReviewObject(Parcel in) {
         id = in.readString();
         author = in.readString();
         content = in.readString();

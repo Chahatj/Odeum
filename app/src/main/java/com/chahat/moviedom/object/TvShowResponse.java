@@ -10,10 +10,14 @@ import java.util.List;
 
 public class TvShowResponse {
 
-    @SerializedName("page") int page;
-    @SerializedName("results") List<TvShowObject> results;
-    @SerializedName("total_results") int totalResults;
-    @SerializedName("total_pages") int totalPages;
+    @SerializedName("page")
+    private int page;
+    @SerializedName("results")
+    private List<TvShowObject> results;
+    @SerializedName("total_results")
+    private int totalResults;
+    @SerializedName("total_pages")
+    private int totalPages;
 
     public int getPage() {
         return page;

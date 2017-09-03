@@ -10,8 +10,10 @@ import java.util.List;
 
 public class VideoResponse {
 
-    @SerializedName("id") int id;
-    @SerializedName("results") List<VideoObject> videoList;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("results")
+    private List<VideoObject> videoList;
 
     public int getId() {
         return id;

@@ -11,14 +11,20 @@ import com.google.gson.annotations.SerializedName;
 
 public class ImagesObject implements Parcelable {
 
-    @SerializedName("aspect_ratio") double aspectRatio;
-    @SerializedName("file_path") String filePath;
-    @SerializedName("height") int height;
-    @SerializedName("vote_average") double voteAverage;
-    @SerializedName("vote_count") int voteCount;
-    @SerializedName("width") int width;
+    @SerializedName("aspect_ratio")
+    private double aspectRatio;
+    @SerializedName("file_path")
+    private String filePath;
+    @SerializedName("height")
+    private int height;
+    @SerializedName("vote_average")
+    private double voteAverage;
+    @SerializedName("vote_count")
+    private int voteCount;
+    @SerializedName("width")
+    private int width;
 
-    protected ImagesObject(Parcel in) {
+    private ImagesObject(Parcel in) {
         aspectRatio = in.readDouble();
         filePath = in.readString();
         height = in.readInt();

@@ -31,8 +31,7 @@ import butterknife.ButterKnife;
 
 public class TvShowSeasonAdapter extends RecyclerView.Adapter<TvShowSeasonAdapter.ViewHolder> {
 
-    List<EpisodeObject> episodeList;
-    private String seasonName = "N/A";
+    private List<EpisodeObject> episodeList;
     private  Context context;
 
     public TvShowSeasonAdapter(Context context){
@@ -46,7 +45,7 @@ public class TvShowSeasonAdapter extends RecyclerView.Adapter<TvShowSeasonAdapte
     }
 
     public void setSeasonName(String seasonName) {
-        this.seasonName = seasonName;
+        String seasonName1 = seasonName;
     }
 
     public void addEpisodeList(List<EpisodeObject> list){

@@ -11,16 +11,24 @@ import com.google.gson.annotations.SerializedName;
 
 public class VideoObject implements Parcelable {
 
-    @SerializedName("id") String id;
-    @SerializedName("key") String key;
-    @SerializedName("name") String name;
-    @SerializedName("site") String site;
-    @SerializedName("size") int size;
-    @SerializedName("type") String  type;
-    @SerializedName("iso_639_1") String iso639;
-    @SerializedName("iso_3166_1") String iso3166;
+    @SerializedName("id")
+    private String id;
+    @SerializedName("key")
+    private String key;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("site")
+    private String site;
+    @SerializedName("size")
+    private int size;
+    @SerializedName("type")
+    private String  type;
+    @SerializedName("iso_639_1")
+    private String iso639;
+    @SerializedName("iso_3166_1")
+    private String iso3166;
 
-    protected VideoObject(Parcel in) {
+    private VideoObject(Parcel in) {
         id = in.readString();
         key = in.readString();
         name = in.readString();

@@ -39,9 +39,8 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
     @BindView(R.id.tv_genre) TextView tv_genre;
     @BindView(R.id.sliding_layout) TabLayout tabs;
     @BindView(R.id.view_pager) ViewPager pager;
-    CharSequence[] Titles = {"INFO","CAST","REVIEW"};
-    int Numboftabs = 3;
-    private  MovieDetailViewAdapter adapter;
+    private CharSequence[] Titles = {"INFO","CAST","REVIEW"};
+    private int Numboftabs = 3;
     @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
     @BindView(R.id.coordinateLayout) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.imageViewBack) ImageView imageViewBack;
@@ -102,13 +101,13 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
             Picasso.with(this).load(ApiClient.IMAGE_URL + imageURLBack).into(movieImage);
         }
 
-            adapter =  new MovieDetailViewAdapter(getSupportFragmentManager(),Titles,Numboftabs,id);
+        MovieDetailViewAdapter adapter = new MovieDetailViewAdapter(getSupportFragmentManager(), Titles, Numboftabs, id);
             pager.setAdapter(adapter);
             tabs.setupWithViewPager(pager);
 
     }
 
-    public void getMovieData(int id){
+    private void getMovieData(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieDetailObject> call = apiInterface.getMovieDetail(id,API_KEY);
 
@@ -165,7 +164,7 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
         }
     }
 
-    public int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

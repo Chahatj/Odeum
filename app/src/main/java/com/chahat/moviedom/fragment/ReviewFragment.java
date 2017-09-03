@@ -36,8 +36,10 @@ public class ReviewFragment extends Fragment {
 
     private static final String TAG = "ReviewFragment";
     private int id;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    @BindView(R.id.noResult) LinearLayout noResultLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.noResult)
+    LinearLayout noResultLayout;
     private MovieReviewAdapter reviewAdapter;
     private static final String SAVE_ID = "id";
     private static final String SAVE_LIST = "list";

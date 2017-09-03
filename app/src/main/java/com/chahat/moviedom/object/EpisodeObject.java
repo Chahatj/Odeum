@@ -11,18 +11,28 @@ import com.google.gson.annotations.SerializedName;
 
 public class EpisodeObject implements Parcelable {
 
-    @SerializedName("air_date") String airDate;
-    @SerializedName("episode_number") int episodeNumber;
-    @SerializedName("name") String name;
-    @SerializedName("overview") String overview;
-    @SerializedName("id") int id;
-    @SerializedName("production_code") String productionCode;
-    @SerializedName("season_number") int seasonNumber;
-    @SerializedName("still_path") String stillPath;
-    @SerializedName("vote_average") double voteAverage;
-    @SerializedName("vote_count") int voteCount;
+    @SerializedName("air_date")
+    private String airDate;
+    @SerializedName("episode_number")
+    private int episodeNumber;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("production_code")
+    private String productionCode;
+    @SerializedName("season_number")
+    private int seasonNumber;
+    @SerializedName("still_path")
+    private String stillPath;
+    @SerializedName("vote_average")
+    private double voteAverage;
+    @SerializedName("vote_count")
+    private int voteCount;
 
-    protected EpisodeObject(Parcel in) {
+    private EpisodeObject(Parcel in) {
         airDate = in.readString();
         episodeNumber = in.readInt();
         name = in.readString();

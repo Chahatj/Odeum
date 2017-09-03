@@ -55,20 +55,31 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
 
     private int id;
     private static final String TAG = "InfoFragment";
-    @BindView(R.id.tv_rating) TextView textViewRating;
-    @BindView(R.id.tv_overview) TextView textViewOverview;
-    @BindView(R.id.tv_releaseDate) TextView textViewReleaseDate;
-    @BindView(R.id.tv_producedBy) TextView textViewProducedBy;
-    @BindView(R.id.tv_budget) TextView textViewBudget;
-    @BindView(R.id.tv_revenue) TextView textViewRevenue;
-    @BindView(R.id.recyclerViewTrailer) RecyclerView recyclerViewTrailer;
-    @BindView(R.id.recyclerViewMovies) RecyclerView recyclerViewMovies;
-    @BindView(R.id.textViewAll) TextView textViewAll;
-    @BindView(R.id.noResult) LinearLayout noResultLayout;
-    @BindView(R.id.noResultSimilar) LinearLayout noResultSimilar;
+    @BindView(R.id.tv_rating)
+    TextView textViewRating;
+    @BindView(R.id.tv_overview)
+    TextView textViewOverview;
+    @BindView(R.id.tv_releaseDate)
+    TextView textViewReleaseDate;
+    @BindView(R.id.tv_producedBy)
+    TextView textViewProducedBy;
+    @BindView(R.id.tv_budget)
+    TextView textViewBudget;
+    @BindView(R.id.tv_revenue)
+    TextView textViewRevenue;
+    @BindView(R.id.recyclerViewTrailer)
+    RecyclerView recyclerViewTrailer;
+    @BindView(R.id.recyclerViewMovies)
+    RecyclerView recyclerViewMovies;
+    @BindView(R.id.textViewAll)
+    TextView textViewAll;
+    @BindView(R.id.noResult)
+    LinearLayout noResultLayout;
+    @BindView(R.id.noResultSimilar)
+    LinearLayout noResultSimilar;
     private VideoAdapter movieVideoAdapter;
     private SimilarMovieAdapter similarMovieAdapter;
-    public static final String ACTIVITY_NAME = "activityname";
+    private static final String ACTIVITY_NAME = "activityname";
     private static final String SAVE_ID = "id";
     private static final String SAVE_RATING = "rating";
     private static final String SAVE_OVERVIEW = "overview";

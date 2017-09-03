@@ -44,8 +44,10 @@ public class CastFragment extends Fragment implements SharedItemClickListner {
 
     private static final String TAG = "CastFragment";
     private int id;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    @BindView(R.id.noResult) LinearLayout noResultLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.noResult)
+    LinearLayout noResultLayout;
     private CastAdapter movieCastAdapter;
     private static final String SAVE_ID = "id";
     private static final String SAVE_LIST = "list";

@@ -24,8 +24,8 @@ import butterknife.ButterKnife;
 
 public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.ReviewViewHolder> {
 
-    List<MovieReviewObject> reviewList;
-    Context context;
+    private List<MovieReviewObject> reviewList;
+    private Context context;
 
     public MovieReviewAdapter(Context context){
         this.context = context;

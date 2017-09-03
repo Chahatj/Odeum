@@ -50,10 +50,14 @@ public class PeopleInfoFragment extends Fragment implements SharedItemClickListn
 
     private int id;
     private static final String INSTANCE_ID = "id";
-    @BindView(R.id.textViewOverview) TextView textViewOverview;
-    @BindView(R.id.textViewBorn) TextView textViewBorn;
-    @BindView(R.id.textViewBirthplace) TextView textViewBirthplace;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.textViewOverview)
+    TextView textViewOverview;
+    @BindView(R.id.textViewBorn)
+    TextView textViewBorn;
+    @BindView(R.id.textViewBirthplace)
+    TextView textViewBirthplace;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     private PeopleImageAdapter imageAdapter;
     private static final String SAVE_BIO = "biography";
     private static final String SAVE_ID = "id";

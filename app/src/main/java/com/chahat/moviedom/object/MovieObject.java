@@ -60,7 +60,7 @@ public class MovieObject implements Parcelable {
 
     }
 
-    protected MovieObject(Parcel in) {
+    private MovieObject(Parcel in) {
         voteCount = in.readInt();
         video = in.readByte() != 0;
         voteAverage = in.readDouble();

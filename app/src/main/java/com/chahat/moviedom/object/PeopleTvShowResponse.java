@@ -10,8 +10,10 @@ import java.util.List;
 
 public class PeopleTvShowResponse {
 
-    @SerializedName("id") int id;
+    @SerializedName("id")
+    private int id;
     @SerializedName("cast")
+    private
     List<TvShowObject> peopleTvShowList;
 
     public int getId() {

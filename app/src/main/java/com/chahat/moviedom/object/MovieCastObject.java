@@ -16,7 +16,7 @@ public class MovieCastObject implements Parcelable{
 
     }
 
-    protected MovieCastObject(Parcel in) {
+    private MovieCastObject(Parcel in) {
         character = in.readString();
         name = in.readString();
         profile = in.readString();

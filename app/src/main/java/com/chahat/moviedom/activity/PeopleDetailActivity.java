@@ -40,9 +40,7 @@ public class PeopleDetailActivity extends AppCompatActivity implements View.OnCl
     @BindView(R.id.tv_name) TextView tvName;
     @BindView(R.id.sliding_layout) TabLayout tabLayout;
     @BindView(R.id.view_pager) ViewPager viewPager;
-    private PeopleDetailViewAdapter viewAdapter;
     private CharSequence[] titles = {"INFO","MOVIES","TV SHOWS"};
-    private int numOfTabs = 3;
     private static final String SAVE_ID = "id";
     private static final String SAVE_IMAGE = "imageurl";
     private static final String SAVE_IMAGE_BACK = "imageurlback";
@@ -84,7 +82,8 @@ public class PeopleDetailActivity extends AppCompatActivity implements View.OnCl
         }
 
         Picasso.with(this).load(ApiClient.IMAGE_URL+imageURL).into(imageViewProfile);
-        viewAdapter = new PeopleDetailViewAdapter(getSupportFragmentManager(),titles,numOfTabs,id);
+        int numOfTabs = 3;
+        PeopleDetailViewAdapter viewAdapter = new PeopleDetailViewAdapter(getSupportFragmentManager(), titles, numOfTabs, id);
         viewPager.setAdapter(viewAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -143,7 +142,7 @@ public class PeopleDetailActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public int getStatusBarHeight() {
+    private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

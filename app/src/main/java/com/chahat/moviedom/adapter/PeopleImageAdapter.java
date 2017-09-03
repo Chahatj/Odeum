@@ -27,7 +27,7 @@ public class PeopleImageAdapter extends RecyclerView.Adapter<PeopleImageAdapter.
 
     private Context context;
     private List<ImagesObject> imagesList;
-    SharedItemClickListner sharedItemClickListner;
+    private SharedItemClickListner sharedItemClickListner;
 
     public PeopleImageAdapter(Context context,SharedItemClickListner itemClickListner){
         this.context = context;

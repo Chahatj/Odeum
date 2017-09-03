@@ -68,22 +68,35 @@ import static com.chahat.moviedom.utils.Constants.SAVEINSTANCE_SHOWTYPE;
 public class TvShowInfoFragment extends Fragment implements SharedItemClickListner,View.OnClickListener {
 
     private int id;
-    @BindView(R.id.tv_rating) TextView textViewRating;
-    @BindView(R.id.tv_overview) TextView textViewOverview;
-    @BindView(R.id.tv_first_air_date) TextView textViewFirstAirDate;
-    @BindView(R.id.tv_last_air_date) TextView textViewLastAirDate;
-    @BindView(R.id.tv_networks) TextView textViewNetworks;
-    @BindView(R.id.tv_createdBy) TextView textViewCreatedBy;
-    @BindView(R.id.tv_show_type) TextView textViewShowType;
-    @BindView(R.id.tv_status) TextView textViewStatus;
-    @BindView(R.id.recyclerViewTrailer) RecyclerView recyclerViewTrailer;
-    @BindView(R.id.recyclerViewSimilarShow) RecyclerView recyclerViewSimilarShow;
-    @BindView(R.id.textViewAll) TextView textViewAll;
-    @BindView(R.id.noResult) LinearLayout noResultLayout;
-    @BindView(R.id.noResultSimilar) LinearLayout noResultSimilar;
+    @BindView(R.id.tv_rating)
+    TextView textViewRating;
+    @BindView(R.id.tv_overview)
+    TextView textViewOverview;
+    @BindView(R.id.tv_first_air_date)
+    TextView textViewFirstAirDate;
+    @BindView(R.id.tv_last_air_date)
+    TextView textViewLastAirDate;
+    @BindView(R.id.tv_networks)
+    TextView textViewNetworks;
+    @BindView(R.id.tv_createdBy)
+    TextView textViewCreatedBy;
+    @BindView(R.id.tv_show_type)
+    TextView textViewShowType;
+    @BindView(R.id.tv_status)
+    TextView textViewStatus;
+    @BindView(R.id.recyclerViewTrailer)
+    RecyclerView recyclerViewTrailer;
+    @BindView(R.id.recyclerViewSimilarShow)
+    RecyclerView recyclerViewSimilarShow;
+    @BindView(R.id.textViewAll)
+    TextView textViewAll;
+    @BindView(R.id.noResult)
+    LinearLayout noResultLayout;
+    @BindView(R.id.noResultSimilar)
+    LinearLayout noResultSimilar;
     private VideoAdapter videoAdapter;
     private SimilarTvShowAdapter tvShowAdapter;
-    public static final String TAG = "TvShowInfoFragment";
+    private static final String TAG = "TvShowInfoFragment";
     private Parcelable mRecyclerStateTvShows,mRecyclerStateTrailor;
 
     public static TvShowInfoFragment newInstance(int id){

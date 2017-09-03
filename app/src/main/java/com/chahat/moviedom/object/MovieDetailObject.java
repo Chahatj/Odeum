@@ -30,7 +30,7 @@ public class MovieDetailObject implements Parcelable {
     @SerializedName("vote_average") private double voteAverage;
     @SerializedName("poster_path") private String posterPath;
 
-    protected MovieDetailObject(Parcel in) {
+    private MovieDetailObject(Parcel in) {
         adult = in.readByte() != 0;
         backdropPath = in.readString();
         budget = in.readInt();
