@@ -24,6 +24,8 @@ import com.chahat.moviedom.api.ApiClient;
 import com.chahat.moviedom.api.ApiInterface;
 import com.chahat.moviedom.object.PeopleObject;
 import com.chahat.moviedom.object.PeopleResponse;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,8 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
     private static final String SAVEINSTANCE_PAGES = "pages";
     private static final String SAVEINSTANCE_CURRENT_PAGE = "page";
     public static final String TAG = "PopularPeopleFragment";
+    @BindView(R.id.adView)
+    AdView mAdView;
 
     public static PopularPeopleFragment newInstance(){
         return new PopularPeopleFragment();
@@ -65,6 +69,11 @@ public class PopularPeopleFragment extends Fragment implements LoadPagesInterfac
 
         View view = inflater.inflate(R.layout.fragment_popular_people,container,false);
         ButterKnife.bind(this,view);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

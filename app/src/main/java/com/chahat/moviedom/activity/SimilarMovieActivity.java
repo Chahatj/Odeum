@@ -22,6 +22,8 @@ import com.chahat.moviedom.api.ApiClient;
 import com.chahat.moviedom.api.ApiInterface;
 import com.chahat.moviedom.object.MovieObject;
 import com.chahat.moviedom.object.MovieResponse;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,8 @@ public class SimilarMovieActivity extends AppCompatActivity implements LoadPages
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.noResult) LinearLayout noResultLayout;
+    @BindView(R.id.adView)
+    AdView adView;
     private MovieAdapter movieAdapter;
     public static final String ACTIVITY_NAME = "activityname";
     public static final String TAG = "TransitionPhoto";
@@ -55,6 +59,10 @@ public class SimilarMovieActivity extends AppCompatActivity implements LoadPages
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_similar_movie);
         ButterKnife.bind(this);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        adView.loadAd(adRequest);
 
         toolbar.setTitle(getResources().getString(R.string.similar_movies));
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

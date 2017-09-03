@@ -23,6 +23,8 @@ import com.chahat.moviedom.api.ApiInterface;
 import com.chahat.moviedom.fragment.AiringTodayFragment;
 import com.chahat.moviedom.object.TvShowObject;
 import com.chahat.moviedom.object.TvShowResponse;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,8 @@ public class SimilarTvShowActivity extends AppCompatActivity implements SharedIt
     Toolbar toolbar;
     @BindView(R.id.noResult)
     LinearLayout noResultLayout;
+    @BindView(R.id.adView)
+    AdView adView;
     private TvShowAdapter tvShowAdapter;
     private int id;
     private Parcelable mRecyclerState;
@@ -58,6 +62,10 @@ public class SimilarTvShowActivity extends AppCompatActivity implements SharedIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_similar_tv_show);
         ButterKnife.bind(this);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        adView.loadAd(adRequest);
 
         toolbar.setTitle(getResources().getString(R.string.similar_tv_shows));
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
