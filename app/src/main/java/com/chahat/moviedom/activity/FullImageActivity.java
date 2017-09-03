@@ -3,11 +3,13 @@ package com.chahat.moviedom.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import com.squareup.picasso.Target;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -90,6 +93,9 @@ public class FullImageActivity extends AppCompatActivity {
             case android.R.id.home:
                 super.onBackPressed();
                 break;
+            case R.id.action_share:
+                shareImage();
+                break;
         }
         return true;
     }
@@ -97,17 +103,20 @@ public class FullImageActivity extends AppCompatActivity {
     private void downloadImage(){
         Picasso.with(this).load(ApiClient.IMAGE_URL+imageURL).into(new Target() {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
                 new Thread(new Runnable() {
 
                     @Override
                     public void run() {
-
-                        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Moviedom/"+new Date().toString() + ".jpg");
                         try {
-                            file.createNewFile();
-                            FileOutputStream ostream = new FileOutputStream(file);
-                           // bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                            File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
+                            if (!file.exists()){
+                                file.mkdir();
+                            }
+                            CharSequence s  = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime());
+                            File outputFile = new File(file,s+".png");
+                            FileOutputStream ostream = new FileOutputStream(outputFile);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 95, ostream);
                             ostream.flush();
                             ostream.close();
                         } catch (IOException e) {
@@ -115,6 +124,43 @@ public class FullImageActivity extends AppCompatActivity {
                         }
                     }
                 }).start();
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
+    }
+
+    private void shareImage(){
+        Picasso.with(this).load(ApiClient.IMAGE_URL+imageURL).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                try {
+                    File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
+                    if (!file.exists()){
+                        file.mkdir();
+                    }
+                    CharSequence s  = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime());
+                    File outputFile = new File(file,s+".png");
+                    FileOutputStream ostream = new FileOutputStream(outputFile);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 95, ostream);
+                    ostream.flush();
+                    ostream.close();
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("image/*");
+                    i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(outputFile));
+                    startActivity(Intent.createChooser(i, "Share with"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
