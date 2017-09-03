@@ -37,4 +37,6 @@
     <string name="show_type">Show Type:</string>
     <string name="show_status">Show Status:</string>
     <string name="similar_tv_shows">Similar TV Shows</string>
+    <string name="full_image_transition">FullImageTransition</string>
+    <string name="download">Download</string>
 </resources>

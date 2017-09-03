@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.chahat.moviedom.Interface.SharedItemClickListner;
 import com.chahat.moviedom.R;
 import com.chahat.moviedom.api.ApiClient;
 import com.chahat.moviedom.object.ImagesObject;
@@ -26,10 +27,12 @@ public class PeopleImageAdapter extends RecyclerView.Adapter<PeopleImageAdapter.
 
     private Context context;
     private List<ImagesObject> imagesList;
+    SharedItemClickListner sharedItemClickListner;
 
-    public PeopleImageAdapter(Context context){
+    public PeopleImageAdapter(Context context,SharedItemClickListner itemClickListner){
         this.context = context;
         imagesList = new ArrayList<>();
+        this.sharedItemClickListner = itemClickListner;
     }
 
     public void setImagesList(List<ImagesObject> imagesList) {
@@ -61,13 +64,20 @@ public class PeopleImageAdapter extends RecyclerView.Adapter<PeopleImageAdapter.
         else return 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.peopleImage) ImageView peopleImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            ImagesObject imagesObject = imagesList.get(getAdapterPosition());
+            sharedItemClickListner.onItemClick(0,peopleImage,imagesObject.getFilePath());
         }
     }
 }

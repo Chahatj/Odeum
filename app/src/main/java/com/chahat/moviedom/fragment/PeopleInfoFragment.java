@@ -1,5 +1,8 @@
 package com.chahat.moviedom.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -9,9 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chahat.moviedom.Interface.SharedItemClickListner;
 import com.chahat.moviedom.R;
+import com.chahat.moviedom.activity.FullImageActivity;
 import com.chahat.moviedom.adapter.PeopleImageAdapter;
 import com.chahat.moviedom.api.ApiClient;
 import com.chahat.moviedom.api.ApiInterface;
@@ -40,7 +46,7 @@ import static com.chahat.moviedom.BuildConfig.API_KEY;
  * Created by chahat on 1/9/17.
  */
 
-public class PeopleInfoFragment extends Fragment {
+public class PeopleInfoFragment extends Fragment implements SharedItemClickListner {
 
     private int id;
     private static final String INSTANCE_ID = "id";
@@ -84,7 +90,7 @@ public class PeopleInfoFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
-        imageAdapter = new PeopleImageAdapter(getContext());
+        imageAdapter = new PeopleImageAdapter(getContext(),this);
         recyclerView.setAdapter(imageAdapter);
 
         if (savedInstanceState==null){
@@ -159,5 +165,17 @@ public class PeopleInfoFragment extends Fragment {
         mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(SAVE_RECYCLER_STATE,mRecyclerState);
         outState.putParcelableArrayList(SAVE_LIST, (ArrayList<? extends Parcelable>) imageAdapter.getImagesList());
+    }
+
+    @Override
+    public void onItemClick(int id, ImageView imageView, String imageURL) {
+        Bundle bundle =null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setTransitionName(getString(R.string.full_image_transition));
+            bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(),imageView,imageView.getTransitionName()).toBundle();
+        }
+        Intent intent = new Intent(getContext(), FullImageActivity.class);
+        intent.putExtra("ImageURL",imageURL);
+        startActivity(intent,bundle);
     }
 }
