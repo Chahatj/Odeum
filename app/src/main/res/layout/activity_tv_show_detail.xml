@@ -9,13 +9,14 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/darkTeal">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/darkTeal"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
@@ -40,9 +41,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="190dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/darkTeal"
                     android:orientation="vertical"
                     app:layout_collapseMode="parallax">
 
@@ -107,7 +108,7 @@
             android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/darkTeal"
             app:tabGravity="fill"
             app:tabTextColor="@color/tabTextColor"
             app:tabSelectedTextColor="@android:color/white"
