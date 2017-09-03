@@ -1,12 +1,15 @@
 package com.chahat.odeum.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by chahat on 2/9/17.
  */
 
-public class EpisodeObject {
+public class EpisodeObject implements Parcelable {
 
     @SerializedName("air_date") String airDate;
     @SerializedName("episode_number") int episodeNumber;
@@ -18,6 +21,31 @@ public class EpisodeObject {
     @SerializedName("still_path") String stillPath;
     @SerializedName("vote_average") double voteAverage;
     @SerializedName("vote_count") int voteCount;
+
+    protected EpisodeObject(Parcel in) {
+        airDate = in.readString();
+        episodeNumber = in.readInt();
+        name = in.readString();
+        overview = in.readString();
+        id = in.readInt();
+        productionCode = in.readString();
+        seasonNumber = in.readInt();
+        stillPath = in.readString();
+        voteAverage = in.readDouble();
+        voteCount = in.readInt();
+    }
+
+    public static final Creator<EpisodeObject> CREATOR = new Creator<EpisodeObject>() {
+        @Override
+        public EpisodeObject createFromParcel(Parcel in) {
+            return new EpisodeObject(in);
+        }
+
+        @Override
+        public EpisodeObject[] newArray(int size) {
+            return new EpisodeObject[size];
+        }
+    };
 
     public String getAirDate() {
         return airDate;
@@ -97,5 +125,24 @@ public class EpisodeObject {
 
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(airDate);
+        parcel.writeInt(episodeNumber);
+        parcel.writeString(name);
+        parcel.writeString(overview);
+        parcel.writeInt(id);
+        parcel.writeString(productionCode);
+        parcel.writeInt(seasonNumber);
+        parcel.writeString(stillPath);
+        parcel.writeDouble(voteAverage);
+        parcel.writeInt(voteCount);
     }
 }

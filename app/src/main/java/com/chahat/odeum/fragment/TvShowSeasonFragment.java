@@ -1,6 +1,7 @@
 package com.chahat.odeum.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.chahat.odeum.R;
 import com.chahat.odeum.adapter.TvShowSeasonAdapter;
@@ -22,6 +24,7 @@ import com.chahat.odeum.object.TvShowDetailObject;
 import com.chahat.odeum.object.TvShowResponse;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,6 +35,9 @@ import retrofit2.Response;
 
 import static com.chahat.odeum.BuildConfig.API_KEY;
 import static com.chahat.odeum.utils.Constants.INSTANCE_ID;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_ID;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_LIST;
+import static com.chahat.odeum.utils.Constants.SAVEINSTANCE_RECYCLERSTATE;
 
 /**
  * Created by chahat on 2/9/17.
@@ -41,7 +47,9 @@ public class TvShowSeasonFragment extends Fragment {
 
     private int id;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
     private TvShowSeasonAdapter showSeasonAdapter;
+    private Parcelable mRecyclerState;
 
     public static TvShowSeasonFragment newInstance(int id){
         Bundle bundle = new Bundle();
@@ -56,6 +64,8 @@ public class TvShowSeasonFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState==null){
             id = getArguments().getInt(INSTANCE_ID);
+        }else {
+            id= savedInstanceState.getInt(SAVEINSTANCE_ID);
         }
     }
 
@@ -71,9 +81,24 @@ public class TvShowSeasonFragment extends Fragment {
         showSeasonAdapter = new TvShowSeasonAdapter(getContext());
         recyclerView.setAdapter(showSeasonAdapter);
 
-        getSeasonDetail(id);
+        if (savedInstanceState==null) {
+            getSeasonDetail(id);
+        }else {
+            mRecyclerState = savedInstanceState.getParcelable(SAVEINSTANCE_RECYCLERSTATE);
+            showSeasonAdapter.setEpisodeList((ArrayList)savedInstanceState.getParcelableArrayList(SAVEINSTANCE_LIST));
+            recyclerView.getLayoutManager().onRestoreInstanceState(mRecyclerState);
+        }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mRecyclerState = recyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(SAVEINSTANCE_RECYCLERSTATE,mRecyclerState);
+        outState.putInt(SAVEINSTANCE_ID,id);
+        outState.putParcelableArrayList(SAVEINSTANCE_LIST, (ArrayList<? extends Parcelable>) showSeasonAdapter.getEpisodeList());
     }
 
     private void getSeasonDetail(int id){
@@ -83,10 +108,9 @@ public class TvShowSeasonFragment extends Fragment {
             @Override
             public void onResponse(Call<TvShowDetailObject> call, Response<TvShowDetailObject> response) {
 
-                int numberOfSeason = response.body().getNumberOfSeasons();
                 List<TvSeasonObject> seasonList = response.body().getTvSeasonList();
 
-                getSeasonEpisodes(numberOfSeason,seasonList);
+                getSeasonEpisodes(seasonList);
             }
 
             @Override
@@ -96,24 +120,42 @@ public class TvShowSeasonFragment extends Fragment {
         });
     }
 
-    private void getSeasonEpisodes(int numberOfSeasons,List<TvSeasonObject> seasonList){
+    private void getSeasonEpisodes(List<TvSeasonObject> seasonList){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         for (final TvSeasonObject season:seasonList){
-            Log.d("TAG","Season: "+season.getSeasonNumber());
                 Call<SeasonObject> call = apiInterface.getSeasonList(id,season.getSeasonNumber(),API_KEY);
                 call.enqueue(new Callback<SeasonObject>() {
                     @Override
                     public void onResponse(Call<SeasonObject> call, Response<SeasonObject> response) {
+                        if (response!=null){
                             List<EpisodeObject> episodeList = response.body().getEpisodeList();
-                            showSeasonAdapter.addEpisodeList(episodeList);
-                            Log.d("TAG",episodeList.get(0).getName());
+                            if (episodeList!=null && episodeList.size()!=0){
+                                showResult();
+                                showSeasonAdapter.addEpisodeList(episodeList);
+                            }else {
+                                showError();
+                            }
+                        }else {
+                            showError();
+                        }
+
                     }
 
                     @Override
                     public void onFailure(Call<SeasonObject> call, Throwable t) {
-                        Log.d("TAG",t.toString());
+                        showError();
                     }
                 });
             }
+    }
+
+    private void showError(){
+        recyclerView.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerView.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
     }
 }

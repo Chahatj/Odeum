@@ -55,6 +55,10 @@ public class TvShowSeasonAdapter extends RecyclerView.Adapter<TvShowSeasonAdapte
         notifyDataSetChanged();
     }
 
+    public List<EpisodeObject> getEpisodeList() {
+        return episodeList;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
