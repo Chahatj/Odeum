@@ -3,17 +3,19 @@ package com.chahat.odeum.object;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by chahat on 29/8/17.
  */
 
 public class MovieReviewObject implements Parcelable {
 
-    private String id,author,content,url;
+    @SerializedName("id") String id;
+    @SerializedName("author") String author;
+    @SerializedName("content") String content;
+    @SerializedName("url") String url;
 
-    public MovieReviewObject(){
-
-    }
 
     protected MovieReviewObject(Parcel in) {
         id = in.readString();

@@ -2,7 +2,9 @@ package com.chahat.odeum.api;
 
 import com.chahat.odeum.fragment.PeopleMoviesFragment;
 import com.chahat.odeum.object.CastResponse;
+import com.chahat.odeum.object.MovieDetailObject;
 import com.chahat.odeum.object.MovieResponse;
+import com.chahat.odeum.object.MovieReviewResponse;
 import com.chahat.odeum.object.PeopleDetailResponse;
 import com.chahat.odeum.object.PeopleMovieResponse;
 import com.chahat.odeum.object.PeopleResponse;
@@ -36,13 +38,13 @@ public interface ApiInterface {
     @GET("movie/top_rated")
     Call<MovieResponse> getTopRatedMovie(@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("movie/{id}")
-    Call<ResponseBody> getMovieDetail(@Path("id") int id,@Query("api_key") String API_KEY);
+    Call<MovieDetailObject> getMovieDetail(@Path("id") int id, @Query("api_key") String API_KEY);
     @GET("movie/{id}/videos")
     Call<VideoResponse> getMovieTrailer(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/credits")
     Call<CastResponse> getMovieCast(@Path("id") int id,@Query("api_key") String API_KEY);
     @GET("movie/{id}/reviews")
-    Call<ResponseBody> getMovieReview(@Path("id") int id,@Query("api_key") String API_KEY);
+    Call<MovieReviewResponse> getMovieReview(@Path("id") int id, @Query("api_key") String API_KEY);
     @GET("movie/{id}/similar")
     Call<MovieResponse> getSimilarMovie(@Path("id") int id,@Query("api_key") String API_KEY,@Query("page") int page);
     @GET("person/popular")

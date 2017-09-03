@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.chahat.odeum.object.MovieDetailObject;
 import com.chahat.odeum.object.MovieObject;
 import com.chahat.odeum.object.MovieResponse;
 import com.chahat.odeum.object.MovieVideoObject;
+import com.chahat.odeum.object.ProductionCompanyObject;
 import com.chahat.odeum.object.VideoResponse;
 
 import org.json.JSONArray;
@@ -170,55 +172,17 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
 
     private void getMovieInfo(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getMovieDetail(id,API_KEY);
+        Call<MovieDetailObject> call = apiInterface.getMovieDetail(id,API_KEY);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<MovieDetailObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                try {
-                    String res = response.body().string();
-                    JSONObject jsonObject = new JSONObject(res);
-                    MovieDetailObject movieDetailObject = new MovieDetailObject();
-                    movieDetailObject.setAdult(jsonObject.getBoolean("adult"));
-                    movieDetailObject.setBackdropPath(jsonObject.getString("backdrop_path"));
-                    movieDetailObject.setBudget(jsonObject.getInt("budget"));
-                    movieDetailObject.setId(jsonObject.getInt("id"));
-                    movieDetailObject.setImdb_id(jsonObject.getString("imdb_id"));
-                    movieDetailObject.setOriginalTitle(jsonObject.getString("original_title"));
-                    movieDetailObject.setOverview(jsonObject.getString("overview"));
-                    movieDetailObject.setPosterPath(jsonObject.getString("poster_path"));
-                    movieDetailObject.setReleaseDate(jsonObject.getString("release_date"));
-                    movieDetailObject.setRevenue(jsonObject.getInt("revenue"));
-                    movieDetailObject.setRuntime(jsonObject.getInt("runtime"));
-                    movieDetailObject.setTagline(jsonObject.getString("tagline"));
-                    movieDetailObject.setTitle(jsonObject.getString("title"));
-                    movieDetailObject.setVoteAverage(jsonObject.getDouble("vote_average"));
-
-                    JSONArray jsonArray = jsonObject.getJSONArray("genres");
-                    StringBuilder genres = new StringBuilder();
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        int id = jsonObject1.getInt("id");
-                        String name = jsonObject1.getString("name");
-                        genres.append(name).append(", ");
-                    }
-                    genres.deleteCharAt(genres.length()-2);
-
-                    movieDetailObject.setGenresName(genres.toString());
-
-                    JSONArray jsonArray1 = jsonObject.getJSONArray("production_companies");
-                    StringBuilder company=new StringBuilder();
-                    for (int i=0;i<jsonArray1.length();i++){
-                        JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
-                        int id = jsonObject1.getInt("id");
-                        String name = jsonObject1.getString("name");
-                        company.append(name).append(", ");
-                    }
-                    company.deleteCharAt(company.length()-2);
-                    textViewProducedBy.setText(company.toString());
-                    String[] date = movieDetailObject.getReleaseDate().split("-");
-                    int hour = movieDetailObject.getRuntime()/60;
-                    int minute = movieDetailObject.getRuntime()%60;
+            public void onResponse(Call<MovieDetailObject> call, Response<MovieDetailObject> response) {
+                if (response!=null){
+                    MovieDetailObject movieDetailObject = response.body();
+                    textViewRating.setText(String.valueOf(movieDetailObject.getVoteAverage()));
+                    textViewOverview.setText(movieDetailObject.getOverview());
+                    textViewBudget.setText("$ "+String.valueOf(movieDetailObject.getBudget()));
+                    textViewRevenue.setText("$ "+String.valueOf(movieDetailObject.getRevenue()));
 
                     try {
                         Date d = new SimpleDateFormat("yyyy-MM-dd").parse(movieDetailObject.getReleaseDate());
@@ -229,19 +193,19 @@ public class InfoFragment extends Fragment implements SharedItemClickListner,Vie
                         e.printStackTrace();
                     }
 
-                    textViewRating.setText(String.valueOf(movieDetailObject.getVoteAverage()));
-                    textViewOverview.setText(movieDetailObject.getOverview());
-                    textViewBudget.setText("$ "+String.valueOf(movieDetailObject.getBudget()));
-                    textViewRevenue.setText("$ "+String.valueOf(movieDetailObject.getRevenue()));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (movieDetailObject.getCompanyList()!=null && movieDetailObject.getCompanyList().size()!=0) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (ProductionCompanyObject object : movieDetailObject.getCompanyList()) {
+                            stringBuilder.append(object.getName()).append(", ");
+                        }
+                        textViewProducedBy.setText(stringBuilder.deleteCharAt(stringBuilder.length()-2));
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("MovieDetail",t.toString());
+            public void onFailure(Call<MovieDetailObject> call, Throwable t) {
+
             }
         });
     }

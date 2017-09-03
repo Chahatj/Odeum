@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.util.TimeUtils;
 import android.view.View;
 import android.view.Window;
@@ -29,6 +30,7 @@ import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.fragment.NowplayingFragment;
 import com.chahat.odeum.fragment.PeopleMoviesFragment;
+import com.chahat.odeum.object.GenresObject;
 import com.chahat.odeum.object.MovieDetailObject;
 import com.squareup.picasso.Picasso;
 
@@ -128,75 +130,35 @@ public class MovieDetailActivity extends AppCompatActivity implements AppBarLayo
 
     public void getMovieData(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getMovieDetail(id,API_KEY);
+        Call<MovieDetailObject> call = apiInterface.getMovieDetail(id,API_KEY);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<MovieDetailObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                try {
-                    String res = response.body().string();
-                    JSONObject jsonObject = new JSONObject(res);
-                    MovieDetailObject movieDetailObject = new MovieDetailObject();
-                    movieDetailObject.setAdult(jsonObject.getBoolean("adult"));
-                    movieDetailObject.setBackdropPath(jsonObject.getString("backdrop_path"));
-                    movieDetailObject.setBudget(jsonObject.getInt("budget"));
-                    movieDetailObject.setId(jsonObject.getInt("id"));
-                    movieDetailObject.setImdb_id(jsonObject.getString("imdb_id"));
-                    movieDetailObject.setOriginalTitle(jsonObject.getString("original_title"));
-                    movieDetailObject.setOverview(jsonObject.getString("overview"));
-                    movieDetailObject.setPosterPath(jsonObject.getString("poster_path"));
-                    movieDetailObject.setReleaseDate(jsonObject.getString("release_date"));
-                    movieDetailObject.setRevenue(jsonObject.getInt("revenue"));
-                    movieDetailObject.setRuntime(jsonObject.getInt("runtime"));
-                    movieDetailObject.setTagline(jsonObject.getString("tagline"));
-                    movieDetailObject.setTitle(jsonObject.getString("title"));
-                    movieDetailObject.setVoteAverage(jsonObject.getDouble("vote_average"));
+            public void onResponse(Call<MovieDetailObject> call, retrofit2.Response<MovieDetailObject> response) {
+                MovieDetailObject movieDetailObject = response.body();
+                if (movieDetailObject.getBackdropPath()!=null){
+                    imageURLBack = movieDetailObject.getBackdropPath();
+                    Picasso.with(getApplicationContext()).load(ApiClient.IMAGE_URL+imageURLBack).into(movieImage);
+                }
+                String[] date = movieDetailObject.getReleaseDate().split("-");
+                int hour = movieDetailObject.getRuntime()/60;
+                int minute = movieDetailObject.getRuntime()%60;
 
-                    JSONArray jsonArray = jsonObject.getJSONArray("genres");
-                    StringBuilder genres = new StringBuilder();
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        int id = jsonObject1.getInt("id");
-                        String name = jsonObject1.getString("name");
-                        genres.append(name).append(", ");
+                tv_date.setText(date[0]+" \u25CF "+hour+" hr "+minute+" min");
+                tv_title.setText(movieDetailObject.getTitle());
+
+                if (movieDetailObject.getGenresList()!=null && movieDetailObject.getGenresList().size()!=0){
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (GenresObject genresObject : movieDetailObject.getGenresList()){
+                        stringBuilder.append(genresObject.getName()).append(", ");
                     }
-                    genres.deleteCharAt(genres.length()-2);
-
-                    movieDetailObject.setGenresName(genres.toString());
-
-                    JSONArray jsonArray1 = jsonObject.getJSONArray("production_companies");
-                    String company=null;
-                    for (int i=0;i<jsonArray1.length();i++){
-                        JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
-                        int id = jsonObject1.getInt("id");
-                        String name = jsonObject1.getString("name");
-                        company = company +", "+ name;
-                    }
-
-                    if (movieDetailObject.getBackdropPath()!=null){
-                        imageURLBack = movieDetailObject.getBackdropPath();
-                        Picasso.with(getApplicationContext()).load(ApiClient.IMAGE_URL+imageURLBack).into(movieImage);
-                    }
-
-                    String[] date = movieDetailObject.getReleaseDate().split("-");
-                    int hour = movieDetailObject.getRuntime()/60;
-                    int minute = movieDetailObject.getRuntime()%60;
-
-                    tv_date.setText(date[0]+" \u25CF "+hour+" hr "+minute+" min");
-                    tv_title.setText(movieDetailObject.getTitle());
-
-                    if (movieDetailObject.getGenresName()!=null){
-                        tv_genre.setText(movieDetailObject.getGenresName());
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    tv_genre.setText(stringBuilder.deleteCharAt(stringBuilder.length()-2));
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<MovieDetailObject> call, Throwable t) {
+
             }
         });
     }

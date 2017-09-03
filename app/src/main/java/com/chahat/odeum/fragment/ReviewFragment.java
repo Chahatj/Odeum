@@ -19,6 +19,7 @@ import com.chahat.odeum.adapter.MovieReviewAdapter;
 import com.chahat.odeum.api.ApiClient;
 import com.chahat.odeum.api.ApiInterface;
 import com.chahat.odeum.object.MovieReviewObject;
+import com.chahat.odeum.object.MovieReviewResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -109,47 +110,29 @@ public class ReviewFragment extends Fragment {
 
     private void getMovieReview(int id){
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getMovieReview(id,API_KEY);
+        Call<MovieReviewResponse> call = apiInterface.getMovieReview(id,API_KEY);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<MovieReviewResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String res = response.body().string();
-                    Log.d(TAG,res);
-                    JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
-                    if (jsonArray.length()!=0){
+            public void onResponse(Call<MovieReviewResponse> call, Response<MovieReviewResponse> response) {
+                if (response!=null){
+                    MovieReviewResponse movieReviewResponse = response.body();
+                    if (movieReviewResponse.getReviewList()!=null && movieReviewResponse.getReviewList().size()!=0){
                         showResult();
-                        List<MovieReviewObject> movieReviewList = new ArrayList<MovieReviewObject>();
-                        for (int i=0;i<jsonArray.length();i++){
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                            MovieReviewObject movieReviewObject = new MovieReviewObject();
-                            movieReviewObject.setId(jsonObject1.getString("id"));
-                            movieReviewObject.setAuthor(jsonObject1.getString("author"));
-                            movieReviewObject.setContent(jsonObject1.getString("content"));
-                            movieReviewObject.setUrl(jsonObject1.getString("url"));
-
-                            movieReviewList.add(movieReviewObject);
-                        }
-                        reviewAdapter.setReviewList(movieReviewList);
+                        reviewAdapter.setReviewList(movieReviewResponse.getReviewList());
                     }else {
                         showError();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(TAG,e.toString());
+                }else {
+                    showError();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                showError();
-                Log.d(TAG,t.toString());
+            public void onFailure(Call<MovieReviewResponse> call, Throwable t) {
+
             }
         });
-
     }
 
     private void showError(){
