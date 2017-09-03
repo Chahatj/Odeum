@@ -1,11 +1,14 @@
 package com.chahat.moviedom.activity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +41,7 @@ public class FullImageActivity extends AppCompatActivity {
     @BindView(R.id.imageView)
     ImageView imageView;
     private String imageURL;
+    private NotificationCompat.Builder mBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,11 @@ public class FullImageActivity extends AppCompatActivity {
             imageView.setTransitionName(getString(R.string.full_image_transition));
         }
 
+        mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(getString(R.string.app_name));
+
         if (savedInstanceState==null) {
             Intent intent = getIntent();
             if (intent != null) {
@@ -68,6 +78,25 @@ public class FullImageActivity extends AppCompatActivity {
         }
         Picasso.with(this).load(ApiClient.IMAGE_URL + imageURL).into(imageView);
     }
+
+    private void onClickNotification(String s){
+        Intent intent = new Intent();
+        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
+        if (file.exists()){
+            File outputFile = new File(file,s);
+            intent.setDataAndType(Uri.fromFile(outputFile),"Image");
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            this,
+                            0,
+                            intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+        }
+
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -89,7 +118,6 @@ public class FullImageActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_download:
-                Log.d("TAG","indownload");
                 downloadImage();
                 break;
             case android.R.id.home:
@@ -121,6 +149,7 @@ public class FullImageActivity extends AppCompatActivity {
                             bitmap.compress(Bitmap.CompressFormat.PNG, 95, ostream);
                             ostream.flush();
                             ostream.close();
+                            sendNotification(s);
                         } catch (IOException e) {
                             Log.e("IOException", e.getLocalizedMessage());
                         }
@@ -138,6 +167,18 @@ public class FullImageActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void sendNotification(CharSequence name){
+        int mNotificationId = new Random().nextInt();
+        mBuilder.setContentText(name+".png");
+        mBuilder.setAutoCancel(true);
+        onClickNotification(name+".png");
+// Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+// Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     private void shareImage(){
