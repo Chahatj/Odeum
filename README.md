@@ -1,6 +1,8 @@
 # Moviedom
-# Your personal guide to the best of Movies and TV Series
-# The Movie Guide for Android (a TMDb client): The fastest, easiest way to find and discover movies, actors and shows on your device. Includes The Movie Database (TMDb) ratings and reviews!
+
+Your personal guide to the best of Movies and TV Series
+
+The Movie Guide for Android (a TMDb client): The fastest, easiest way to find and discover movies, actors and shows on your device. Includes The Movie Database (TMDb) ratings and reviews!
 
 
 <p float="left">
