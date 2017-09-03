@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.chahat.odeum.activity.SimilarTvShowActivity">
+    tools:context="com.chahat.moviedom.activity.SimilarTvShowActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"

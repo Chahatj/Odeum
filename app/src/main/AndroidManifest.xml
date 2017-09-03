@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chahat.odeum">
+    package="com.chahat.moviedom">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.chahat.moviedom.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,21 +23,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MovieDetailActivity"
+            android:name="com.chahat.moviedom.activity.MovieDetailActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
-            android:name=".activity.SimilarMovieActivity"
+            android:name="com.chahat.moviedom.activity.SimilarMovieActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.ContactActivity"
+            android:name="com.chahat.moviedom.activity.ContactActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.PeopleDetailActivity"
+            android:name="com.chahat.moviedom.activity.PeopleDetailActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
-            android:name=".activity.TvShowDetailActivity"
+            android:name="com.chahat.moviedom.activity.TvShowDetailActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity android:name=".activity.SimilarTvShowActivity"
+        <activity android:name="com.chahat.moviedom.activity.SimilarTvShowActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
