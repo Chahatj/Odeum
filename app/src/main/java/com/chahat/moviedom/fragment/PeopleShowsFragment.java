@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chahat.moviedom.Interface.SharedItemClickListner;
 import com.chahat.moviedom.R;
@@ -45,8 +46,8 @@ public class PeopleShowsFragment extends Fragment implements SharedItemClickList
     private int id;
     private static final String INSTANCE_ID = "id";
     private TvShowAdapter tvShowAdapter;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
     private Parcelable mRecyclerState;
     public static final String TAG = "PeopleShowsFrament";
 
@@ -110,7 +111,17 @@ public class PeopleShowsFragment extends Fragment implements SharedItemClickList
         call.enqueue(new Callback<PeopleTvShowResponse>() {
             @Override
             public void onResponse(Call<PeopleTvShowResponse> call, Response<PeopleTvShowResponse> response) {
-                tvShowAdapter.setTvShowList(response.body().getPeopleTvShowList());
+                if (response!=null) {
+                    PeopleTvShowResponse showResponse = response.body();
+                    if (showResponse.getPeopleTvShowList()!=null && showResponse.getPeopleTvShowList().size()!=0) {
+                        showResult();
+                        tvShowAdapter.setTvShowList(response.body().getPeopleTvShowList());
+                    }else {
+                        showError();
+                    }
+                }else {
+                    showError();
+                }
             }
 
             @Override
@@ -118,6 +129,16 @@ public class PeopleShowsFragment extends Fragment implements SharedItemClickList
 
             }
         });
+    }
+
+    private void showError(){
+        recyclerView.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerView.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
     }
 
     @Override

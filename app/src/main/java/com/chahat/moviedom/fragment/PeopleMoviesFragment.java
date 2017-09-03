@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chahat.moviedom.Interface.SharedItemClickListner;
 import com.chahat.moviedom.R;
@@ -43,6 +44,7 @@ public class PeopleMoviesFragment extends Fragment implements SharedItemClickLis
     private int id;
     private static final String INSTANCE_ID = "id";
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.noResult) LinearLayout noResultLayout;
     private MovieAdapter movieAdapter;
     private static final String SAVE_ID = "id";
     private static final String SAVE_RECYCLER_STATE = "recyclerState";
@@ -107,8 +109,17 @@ public class PeopleMoviesFragment extends Fragment implements SharedItemClickLis
         call.enqueue(new Callback<PeopleMovieResponse>() {
             @Override
             public void onResponse(Call<PeopleMovieResponse> call, Response<PeopleMovieResponse> response) {
-                PeopleMovieResponse peopleMovieResponse = response.body();
-                movieAdapter.setMovieList(peopleMovieResponse.getPeopleMoviesList());
+                if (response!=null) {
+                    PeopleMovieResponse peopleMovieResponse = response.body();
+                    if (peopleMovieResponse.getPeopleMoviesList()!=null && peopleMovieResponse.getPeopleMoviesList().size()!=0) {
+                        showResult();
+                        movieAdapter.setMovieList(peopleMovieResponse.getPeopleMoviesList());
+                    }else {
+                        showError();
+                    }
+                }else {
+                    showError();
+                }
             }
 
             @Override
@@ -116,6 +127,16 @@ public class PeopleMoviesFragment extends Fragment implements SharedItemClickLis
 
             }
         });
+    }
+
+    private void showError(){
+        recyclerView.setVisibility(View.GONE);
+        noResultLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showResult(){
+        recyclerView.setVisibility(View.VISIBLE);
+        noResultLayout.setVisibility(View.GONE);
     }
 
     @Override

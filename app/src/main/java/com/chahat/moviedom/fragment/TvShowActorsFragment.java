@@ -110,10 +110,14 @@ public class TvShowActorsFragment extends Fragment implements SharedItemClickLis
             @Override
             public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
 
-                List<CastObject> castList = response.body().getCastList();
-                if (castList!=null && castList.size()!=0) {
-                    showResult();
-                    castAdapter.setCastList(castList);
+                if (response!=null) {
+                    List<CastObject> castList = response.body().getCastList();
+                    if (castList != null && castList.size() != 0) {
+                        showResult();
+                        castAdapter.setCastList(castList);
+                    } else {
+                        showError();
+                    }
                 }else {
                     showError();
                 }

@@ -104,10 +104,16 @@ public class TvShowSeasonFragment extends Fragment {
         call.enqueue(new Callback<TvShowDetailObject>() {
             @Override
             public void onResponse(Call<TvShowDetailObject> call, Response<TvShowDetailObject> response) {
-
-                List<TvSeasonObject> seasonList = response.body().getTvSeasonList();
-
-                getSeasonEpisodes(seasonList);
+                if (response!=null) {
+                    if (response.body().getTvSeasonList()!=null && response.body().getTvSeasonList().size()!=0) {
+                        List<TvSeasonObject> seasonList = response.body().getTvSeasonList();
+                        getSeasonEpisodes(seasonList);
+                    }else {
+                        showError();
+                    }
+                }else {
+                    showError();
+                }
             }
 
             @Override

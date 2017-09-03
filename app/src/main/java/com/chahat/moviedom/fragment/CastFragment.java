@@ -111,11 +111,14 @@ public class CastFragment extends Fragment implements SharedItemClickListner {
         call.enqueue(new Callback<CastResponse>() {
             @Override
             public void onResponse(Call<CastResponse> call, Response<CastResponse> response) {
-
-                List<CastObject> castList = response.body().getCastList();
-                if (castList!=null && castList.size()!=0) {
-                    showResult();
-                    movieCastAdapter.setCastList(castList);
+                if (response!=null) {
+                    List<CastObject> castList = response.body().getCastList();
+                    if (castList != null && castList.size() != 0) {
+                        showResult();
+                        movieCastAdapter.setCastList(castList);
+                    } else {
+                        showError();
+                    }
                 }else {
                     showError();
                 }
