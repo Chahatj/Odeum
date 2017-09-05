@@ -90,7 +90,7 @@ public class NowplayingFragment extends Fragment implements SwipeRefreshLayout.O
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<MovieResponse> call = apiInterface.getNowPlayingMovies(API_KEY,page);
+        Call<MovieResponse> call = apiInterface.getNowPlayingMovies(API_KEY,page,"US");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {

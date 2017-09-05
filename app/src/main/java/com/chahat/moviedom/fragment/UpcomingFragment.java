@@ -90,7 +90,7 @@ public class UpcomingFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<MovieResponse> call = apiInterface.getUpcomingMovies(API_KEY,page);
+        Call<MovieResponse> call = apiInterface.getUpcomingMovies(API_KEY,page,"US");
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
