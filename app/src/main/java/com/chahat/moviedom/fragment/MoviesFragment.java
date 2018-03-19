@@ -29,9 +29,9 @@ public class MoviesFragment extends Fragment {
     private TabLayout tabs;
     private CharSequence[] Titles={"NOW PLAYING","UPCOMING","POPULAR","TOP RATED"};
     private int Numboftabs = 4;
-    @BindView(R.id.adView)
+   /* @BindView(R.id.adView)
     AdView adView;
-
+*/
     public static MoviesFragment newInstance(){
         return new MoviesFragment();
     }
@@ -43,9 +43,9 @@ public class MoviesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movies,container,false);
         ButterKnife.bind(this,view);
 
-        AdRequest adRequest = new AdRequest.Builder()
+        /*AdRequest adRequest = new AdRequest.Builder()
                 .build();
-        adView.loadAd(adRequest);
+        adView.loadAd(adRequest);*/
 
         adapter =  new ViewPagerAdapter(getChildFragmentManager(),Titles,Numboftabs);
 

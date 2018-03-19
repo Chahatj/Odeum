@@ -71,4 +71,14 @@ public interface ApiInterface {
     Call<CastResponse> getCastList(@Path("tv_id") int id,@Query("api_key") String API_KEY);
     @GET("tv/{tv_id}/season/{season_number}")
     Call<SeasonObject> getSeasonList(@Path("tv_id") int id,@Path("season_number") int seasonNumber,@Query("api_key") String API_KEY);
+
+    @GET("search/movie")
+    Call<MovieResponse> searchMovies(@Query("api_key") String API_KEY, @Query("query") String query, @Query("page") int page,@Query("region") String region);
+
+    @GET("search/tv")
+    Call<TvShowResponse> searchTvShow(@Query("api_key") String API_KEY, @Query("query") String query, @Query("page") int page);
+
+    @GET("search/person")
+    Call<PeopleResponse> searchPopularPeople(@Query("api_key") String API_KEY, @Query("query") String query, @Query("page") int page,@Query("region") String region);
+
 }

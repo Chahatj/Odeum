@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +23,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".search.SearchResultActivity" />
         </activity>
         <activity
             android:name=".activity.MovieDetailActivity"
@@ -42,8 +45,23 @@
         <activity
             android:name=".activity.SimilarTvShowActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.FullImageActivity"
+        <activity
+            android:name=".activity.FullImageActivity"
             android:theme="@style/AppTheme.ActionBar.Transparent">
+        </activity>
+
+        <activity
+            android:name=".search.SearchResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
     </application>
 

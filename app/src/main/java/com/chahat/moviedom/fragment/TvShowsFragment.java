@@ -29,8 +29,6 @@ public class TvShowsFragment extends Fragment {
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     private final CharSequence[] titles = {"AIRING TODAY","ON THE AIR","POPULAR","TOP RATED"};
-    @BindView(R.id.adView)
-    AdView mAdView;
 
     public static TvShowsFragment newInstance(){
         return new TvShowsFragment();
@@ -41,10 +39,6 @@ public class TvShowsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tv_shows,container,false);
         ButterKnife.bind(this,view);
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mAdView.loadAd(adRequest);
 
         int numOfTabs = 4;
         TvShowsPagerAdapter pagerAdapter = new TvShowsPagerAdapter(getChildFragmentManager(), titles, numOfTabs);

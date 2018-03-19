@@ -40,4 +40,8 @@
     <string name="share">Share</string>
     <string name="banner_ad_unit_id">ca-app-pub-5219736083818079/8300089984</string>
     <string name="permission_required">Permission required to download</string>
+    <string name="search_hint">Search</string>
+    <string name="sentiment_icon">sentiment_icon</string>
+    <string name="oops_something_went_wrong">Oops...Someting went wrong</string>
+    <string name="please_try_again">Please, try again</string>
 </resources>
