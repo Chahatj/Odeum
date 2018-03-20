@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.chahat.moviedom.R;
@@ -29,9 +31,17 @@ import com.chahat.moviedom.api.ApiClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -42,12 +52,14 @@ import static com.chahat.moviedom.utils.Constants.SAVEINSTANCE_POSTER_URL;
 
 public class FullImageActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.imageView) ImageView imageView;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+
     private String imageURL;
     private NotificationCompat.Builder mBuilder;
+    private String mCurrentPhotoPath;
+    private File storageDirPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,25 +94,29 @@ public class FullImageActivity extends AppCompatActivity {
         }else {
             imageURL = savedInstanceState.getString(SAVEINSTANCE_POSTER_URL);
         }
-        Picasso.with(this).load(ApiClient.IMAGE_URL + imageURL).into(imageView);
+
+        storageDirPic = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        new DownloadTask(this).execute(imageURL);
     }
 
-    private void onClickNotification(String s){
-        Intent intent = new Intent();
-        File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
-        if (file.exists()){
-            File outputFile = new File(file,s);
-            intent.setDataAndType(Uri.fromFile(outputFile),"Image");
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getActivity(
-                            this,
-                            0,
-                            intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + "_";
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                  storageDirPic /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
 
@@ -123,24 +139,6 @@ public class FullImageActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_download:
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                0);
-                    }
-                } else {
-                    downloadImage();
-                }
-                break;
             case android.R.id.home:
                 super.onBackPressed();
                 break;
@@ -151,105 +149,77 @@ public class FullImageActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 0: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    downloadImage();
-                } else {
-                    Toast.makeText(this, R.string.permission_required, Toast.LENGTH_SHORT).show();
+    private void shareImage(){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("image/*");
+        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mCurrentPhotoPath)));
+        startActivity(Intent.createChooser(i, "Share with"));
+    }
+
+
+    public static class DownloadTask extends AsyncTask<String,Integer,String>{
+
+        WeakReference<FullImageActivity> weakReference;
+
+        public DownloadTask(FullImageActivity activity){
+            weakReference = new WeakReference<FullImageActivity>(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            weakReference.get().progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String imageURL = strings[0];
+
+            int count;
+            try {
+                Log.d("DownloadTask","Downloading...");
+                URL url = new URL(ApiClient.IMAGE_URL+imageURL);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // getting file length
+                int lengthOfFile = connection.getContentLength();
+                // input stream to read file - with 8k buffer
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                // Output stream to write file
+                OutputStream output = new FileOutputStream(weakReference.get().createImageFile());
+                byte data[] = new byte[1024];
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // writing data to file
+                    output.write(data, 0, count);
+                    if (isCancelled()) break;
+                }
+                // flushing output
+                output.flush();
+                // closing streams
+                output.close();
+                input.close();
+
+                return weakReference.get().mCurrentPhotoPath;
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.toString());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s!=null){
+                if (weakReference!=null && !weakReference.get().isFinishing()){
+                    weakReference.get().progressBar.setVisibility(View.GONE);
+                    Picasso.with(weakReference.get().getApplicationContext()).load(Uri.fromFile(new File(s))).into(weakReference.get().imageView);
                 }
             }
         }
-    }
-
-    private void downloadImage(){
-        Picasso.with(this).load(ApiClient.IMAGE_URL+imageURL).into(new Target() {
-            @Override
-            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
-                            if (!file.exists()){
-                                file.mkdir();
-                            }
-                            CharSequence s  = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime());
-                            File outputFile = new File(file,s+".png");
-                            FileOutputStream ostream = new FileOutputStream(outputFile);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 95, ostream);
-                            ostream.flush();
-                            ostream.close();
-                            sendNotification(s);
-                        } catch (IOException e) {
-                            Log.e("IOException", e.getLocalizedMessage());
-                        }
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        });
-    }
-
-    private void sendNotification(CharSequence name){
-        int mNotificationId = new Random().nextInt();
-        mBuilder.setContentText(name+".png");
-        mBuilder.setAutoCancel(true);
-        onClickNotification(name+".png");
-// Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-// Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
-    }
-
-    private void shareImage(){
-        Picasso.with(this).load(ApiClient.IMAGE_URL+imageURL).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-                try {
-                    File file = new File(Environment.getExternalStorageDirectory().getPath()+"/Moviedom");
-                    if (!file.exists()){
-                        file.mkdir();
-                    }
-                    CharSequence s  = DateFormat.format("MM-dd-yy hh-mm-ss", new Date().getTime());
-                    File outputFile = new File(file,s+".png");
-                    FileOutputStream ostream = new FileOutputStream(outputFile);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 95, ostream);
-                    ostream.flush();
-                    ostream.close();
-                    Intent i = new Intent(Intent.ACTION_SEND);
-                    i.setType("image/*");
-                    i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(outputFile));
-                    startActivity(Intent.createChooser(i, "Share with"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        });
     }
 }

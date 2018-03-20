@@ -7,9 +7,4 @@
         app:showAsAction="always"
         android:title="@string/share"/>
 
-    <item   android:id="@+id/action_download"
-            android:icon="@drawable/ic_get_app_white_24dp"
-            app:showAsAction="always"
-            android:title="@string/download"/>
-
 </menu>
